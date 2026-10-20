@@ -4,7 +4,8 @@ const readLocal = (key, fallback) => { try { return JSON.parse(localStorage.getI
 const saveLocal = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Reading works without storage. */ } };
 const stored = readLocal('ai-reading:saved', []);
 const bookmarks = new Set(Array.isArray(stored) ? stored.filter(x => typeof x === 'string') : []);
-let days = [], selected = '', topic = '全部', onlySaved = false;
+let days = [], selected = '', topic = '全部', onlySaved = false, calendarMonth = '';
+let sectionObserver;
 const preferredTheme = readLocal('ai-reading:theme', null);
 document.documentElement.dataset.theme = preferredTheme === 'dark' || (preferredTheme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
 $('theme').onclick = () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; saveLocal('ai-reading:theme', next); };
@@ -106,10 +107,79 @@ function validFeed(feed) {
   }
   return feed.days.slice().sort((a,b) => b.date.localeCompare(a.date));
 }
-function chooseDate(date) { selected = date; if(date) location.hash = date; render(); }
+function resetFilters() {
+  topic = '全部'; onlySaved = false; $('search').value = ''; $('saved').setAttribute('aria-pressed','false');
+}
+function chooseDate(date) {
+  selected = date; calendarMonth = date.slice(0,7); resetFilters();
+  if(date) history.pushState(null,'',`#${date}`);
+  render();
+}
+function renderCalendar() {
+  const nav=$('dates'); nav.replaceChildren();
+  if(!days.length) return;
+  calendarMonth ||= selected.slice(0,7) || days[0].date.slice(0,7);
+  const [year,month]=calendarMonth.split('-').map(Number);
+  const monthKey=(y,m)=>`${y}-${String(m).padStart(2,'0')}`;
+  const adjacent=delta=>{const d=new Date(year,month-1+delta,1);return monthKey(d.getFullYear(),d.getMonth()+1);};
+  const header=el('div',null,'calendar-header');
+  for(const delta of [-1,1]) {
+    const button=el('button',delta<0?'‹':'›','month-arrow');
+    button.setAttribute('aria-label',delta<0?'上个月':'下个月');
+    const next=adjacent(delta);
+    button.disabled=next<days[days.length-1].date.slice(0,7)||next>days[0].date.slice(0,7);
+    button.onclick=()=>{calendarMonth=next; renderCalendar();};
+    if(delta<0) header.append(button);
+    else {const label=el('span',`${year} 年 ${month} 月`,'calendar-month');label.setAttribute('aria-live','polite');header.append(label,button);}
+  }
+  nav.append(header);
+  const grid=el('div',null,'calendar-grid'); grid.setAttribute('aria-label',`${year}年${month}月`);
+  for(const day of ['一','二','三','四','五','六','日']) grid.append(el('span',day,'calendar-weekday'));
+  const offset=(new Date(year,month-1,1).getDay()+6)%7;
+  for(let i=0;i<offset;i++) {const blank=el('span');blank.setAttribute('aria-hidden','true');grid.append(blank);}
+  const editions=new Map(days.map(d=>[d.date,d]));
+  const today=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai'}).format(new Date());
+  for(let day=1;day<=new Date(year,month,0).getDate();day++) {
+    const date=`${calendarMonth}-${String(day).padStart(2,'0')}`, edition=editions.get(date);
+    const button=el('button',String(day),'calendar-day'+(edition?' has-edition':'')+(date===selected?' selected':'')+(date===today?' today':''));
+    button.disabled=!edition;
+    button.setAttribute('aria-label',`${year}年${month}月${day}日，${edition?`${edition.articles.length}篇推荐`:'暂无推荐'}`);
+    button.title=edition?`${edition.articles.length} 篇推荐`:'暂无推荐';
+    if(date===selected) button.setAttribute('aria-current','date');
+    if(edition) button.onclick=()=>chooseDate(date);
+    grid.append(button);
+  }
+  nav.append(grid,el('p','● 有推荐   ·   实心为当前选中','calendar-legend'));
+}
+function partTitle(part, edition) {
+  if(part.kind!=='article') return part.label;
+  const heading=part.raw.match(/^#{1,3}\s+(.+)$/m)?.[1];
+  return heading?.split(/[｜|]/).pop().replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, '').replace(/\*\*/g,'').trim() || edition.articles[part.articleIndex]?.title || part.label;
+}
+function jumpToSection(id) {
+  const date=id.split('--')[0];
+  if(!days.some(d=>d.date===date)) return;
+  selected=date; calendarMonth=date.slice(0,7);resetFilters();render();
+  document.getElementById(id)?.scrollIntoView({block:'start'});
+  setActiveSection(id);
+}
+function setActiveSection(id) {
+  document.querySelectorAll('#edition-nav .toc-link').forEach(link=>{
+    const active=link.getAttribute('href')===`#${id}`;
+    link.classList.toggle('active',active);
+    if(active) link.setAttribute('aria-current','location'); else link.removeAttribute('aria-current');
+  });
+}
+function observeSections() {
+  sectionObserver?.disconnect();
+  if(!('IntersectionObserver' in window)) return;
+  sectionObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries) if(entry.isIntersecting) setActiveSection(entry.target.id);
+  },{rootMargin:'-5% 0px -65% 0px',threshold:0});
+  document.querySelectorAll('.reading-panel').forEach(panel=>sectionObserver.observe(panel));
+}
 function renderNav() {
-  $('dates').replaceChildren();
-  for (const day of days) { const b = el('button', null, 'date-button' + (selected === day.date ? ' active' : '')); b.append(el('span', `${day.date.slice(0,4)} · ${formatDate(day.date)}`), el('small', `${day.articles.length} 篇`)); if(selected === day.date) b.setAttribute('aria-current','date'); b.onclick = () => chooseDate(day.date); $('dates').append(b); }
+  renderCalendar();
   const toc=$('edition-nav');
   if(toc) {
     toc.replaceChildren(); const edition=days.find(d=>d.date===selected);
@@ -117,7 +187,9 @@ function renderNav() {
       toc.append(el('div','本期目录','toc-heading'));
       editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
         const a=el('a',null,'toc-link'); a.href=`#${edition.date}--section-${i}`;
-        a.append(el('span',part.label,'toc-label'));
+        a.append(el('span',partTitle(part,edition),'toc-label'));
+        if(part.kind==='article') a.prepend(el('span',String(part.articleIndex+1).padStart(2,'0'),'toc-number'));
+        a.onclick=event=>{event.preventDefault();history.pushState(null,'',a.getAttribute('href'));jumpToSection(`${edition.date}--section-${i}`);};
         if(part.kind==='article' && edition.articles[part.articleIndex]) a.append(el('small',edition.articles[part.articleIndex].topic));
         toc.append(a);
       });
@@ -163,10 +235,16 @@ function render() {
       for(const item of matches.filter(item=>item.date===date)) $('content').append(card(item.a,item.date,Boolean(edition.fullText)));
     }
   }
+  observeSections();
 }
 $('search').addEventListener('input',render);
 $('saved').onclick = () => { onlySaved = !onlySaved; $('saved').setAttribute('aria-pressed',String(onlySaved)); render(); };
-window.addEventListener('hashchange', () => { const date = hashDate(); if(days.some(d => d.date === date) && selected!==date) { selected = date; render(); } });
+window.addEventListener('hashchange', () => {
+  const date=hashDate();
+  if(!days.some(d=>d.date===date)) return;
+  if(location.hash.includes('--section-')) jumpToSection(location.hash.slice(1));
+  else {selected=date;calendarMonth=date.slice(0,7);resetFilters();render();}
+});
 async function load() {
   try {
     const response = await fetch('./feed.json', {cache:'no-cache'}); if(!response.ok) throw Error('请求失败');
