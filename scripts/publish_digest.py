@@ -17,7 +17,7 @@ def canonical_url(value):
     return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path.rstrip('/'), urlencode(sorted(query)), ''))
 
 
-def validate_day(day):
+def validate_day(day, require_full_text=False):
     if not isinstance(day, dict):
         raise ValueError('day must be an object')
     date = day.get('date', '')
@@ -25,6 +25,9 @@ def validate_day(day):
         raise ValueError('date must be YYYY-MM-DD')
     if not isinstance(day.get('intro', ''), str):
         raise ValueError('intro must be a string')
+    if require_full_text or 'fullText' in day:
+        if not isinstance(day.get('fullText'), str) or not day['fullText'].strip():
+            raise ValueError('fullText must preserve the complete recommendation response')
     articles = day.get('articles')
     if not isinstance(articles, list) or len(articles) != 3:
         raise ValueError('each daily digest must have exactly three verified articles')
@@ -56,7 +59,7 @@ def validate_day(day):
 def merge(feed, day):
     if feed.get('schemaVersion') != 1 or not isinstance(feed.get('days'), list):
         raise ValueError('unsupported feed schema')
-    new_urls, new_ids = validate_day(day)
+    new_urls, new_ids = validate_day(day, require_full_text=True)
     old_dates = set()
     retained = []
     for old in feed['days']:
