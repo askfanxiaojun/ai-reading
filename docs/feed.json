@@ -1,1 +1,65 @@
-{"schemaVersion":1,"updatedAt":null,"days":[]}
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-20T11:20:04.657Z",
+  "days": [
+    {
+      "date": "2026-10-20",
+      "intro": "首期上线：沿用今天推荐的三篇选题，摘要根据可核实的原文与来源信息重新整理，非历史输出逐字迁移。分别关注 Agent 架构、AI 用户研究和个人助理体验。阅读时间为估计，Every 使用来源标注。",
+      "articles": [
+        {
+          "id": "https://every.to/source-code/why-we-handed-our-agent-s-infrastructure-to-anthropic",
+          "url": "https://every.to/source-code/why-we-handed-our-agent-s-infrastructure-to-anthropic",
+          "title": "把 Agent 基础设施交给平台后，产品团队该专注什么？",
+          "originalTitle": "Why We Handed Our Agent’s Infrastructure to Anthropic",
+          "topic": "Agent 架构",
+          "source": "Every · Source Code",
+          "author": "Paridhi Agarwal",
+          "publishedAt": "2026-10-08",
+          "readingMinutes": 11,
+          "summary": "Every 从为员工各自维护 Agent，转向公司共享的 Slack 助手，并把运行基础设施交给 Claude Managed Agents。自建阶段的会话恢复、登录续期和机器维护消耗了团队精力；托管后，重点转向协作语境、身份和权限设计。",
+          "keyPoints": [
+            "共享 Agent 让团队上下文与技能能够复用。",
+            "托管减少运维负担，但带来模型选择、数据保留和迁移成本方面的约束。",
+            "团队仍需处理何时回应、代表谁执行，以及中断请求如何恢复等产品与工程问题。"
+          ],
+          "whyRead": "产品思考：评估自建与托管时，把团队时间、长期迁移成本和协作体验一起纳入，而不只比较模型费用。"
+        },
+        {
+          "id": "https://www.nngroup.com/articles/synthetic-users-vs-human-respondents/",
+          "url": "https://www.nngroup.com/articles/synthetic-users-vs-human-respondents/",
+          "title": "AI 模拟用户能得出相同结论，为什么仍不能替代真实调研？",
+          "originalTitle": "Synthetic Users vs. Human Respondents: Same Conclusion, Less Variation",
+          "topic": "用户研究",
+          "source": "Nielsen Norman Group",
+          "author": "Rachel Banawa",
+          "publishedAt": "2026-10-16",
+          "readingMinutes": 7,
+          "summary": "NN/G 对比了 604 名真人与 120 个合成受访者对同一开放问题的回答。两组的主要结论相近，但 AI 回答更集中，缺少真人中的罕见表达。这个实验提醒我们：主流结论相似，并不意味着整个用户群体被准确代表。",
+          "keyPoints": [
+            "真人给出超过 50 种标签，合成受访者约 12 种。",
+            "实验存在提问格式与样本构成差异，不能将结果推广为所有合成用户工具的定论。",
+            "合成回答适合启发假设；涉及长尾需求与人群差异时，需要真人验证。"
+          ],
+          "whyRead": "产品思考：用 AI 辅助调研时，单独检查少数用户与异常需求是否被遗漏，避免只得到一份更整齐的共识。"
+        },
+        {
+          "id": "https://www.vox.com/advice/506547/muse-instinct-chatgpt-dots-ai-personal-agent",
+          "url": "https://www.vox.com/advice/506547/muse-instinct-chatgpt-dots-ai-personal-agent",
+          "title": "把琐事交给个人 Agent，我们也交出了什么？",
+          "originalTitle": "We all want to offload our most tedious tasks. But what do we lose in the process?",
+          "topic": "产品与体验",
+          "source": "Vox",
+          "author": "作者未确认",
+          "publishedAt": "2026-10-19",
+          "readingMinutes": null,
+          "summary": "作者体验个人 Agent 后发现，省事伴随权限让渡、主动行为和监督成本。未经期待的主动帮助，也可能成为新的打扰。",
+          "keyPoints": [
+            "能力增加，往往也意味着更多个人数据访问。",
+            "从小任务积累信任，比一次交出全部权限更稳妥。"
+          ],
+          "whyRead": "产品思考：主动服务应让用户看得懂、管得住；衡量减负时，也要计入监督与纠错成本。"
+        }
+      ]
+    }
+  ]
+}
