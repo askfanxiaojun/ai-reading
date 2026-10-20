@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="每日三篇，关于 AI、Agent 与产品的深度阅读。"><meta name="color-scheme" content="light dark">
+  <title>AI 阅读札记</title><link rel="stylesheet" href="./style.css"><script src="./app.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="./"><span class="brand-icon">阅</span><span>AI 阅读札记<small>AI · AGENT · PRODUCT</small></span></a><div class="header-actions"><span class="edition">每天三篇，保持好奇。</span><button id="theme" aria-label="切换深浅色模式">◐</button></div></header>
+  <main>
+    <section class="intro"><div class="eyebrow">A LITTLE READING, EVERY DAY</div><h1>把值得读的，<br>留在这里。</h1><p>每天精选 AI 与产品深度文章。读观点，也读它与你工作的关系。</p><div class="stats" id="stats">每日精选 · 持续积累</div></section>
+    <section class="workspace" aria-label="阅读归档">
+      <aside><div class="aside-heading">阅读日历 <span id="day-count">0 期</span></div><nav id="dates" aria-label="选择日期"></nav><p class="archive-note">一日一期，按日期归档。<br>推荐内容可直接阅读，原文另附链接。</p></aside>
+      <div class="reading-area">
+        <div class="toolbar"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索标题、观点、来源…" aria-label="搜索文章"></label><button id="saved" aria-pressed="false">☆ 只看收藏</button></div>
+        <div id="topics" class="topics" aria-label="按主题筛选"></div>
+        <div id="status" role="status" aria-live="polite">正在载入阅读札记…</div>
+        <div id="content"></div>
+      </div>
+    </section>
+  </main>
+  <footer><span>AI 阅读札记</span><span id="updated">读得少一点，想得深一点。</span></footer>
+</body>
+</html>
