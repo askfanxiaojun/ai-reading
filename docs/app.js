@@ -11,6 +11,45 @@ $('theme').onclick = () => { const next = document.documentElement.dataset.theme
 const el = (tag, text, className) => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
 const urlSafe = value => { try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : null; } catch { return null; } };
 const formatDate = value => { const parts = value.split('-'); return `${Number(parts[1])}月${Number(parts[2])}日`; };
+const hashDate = () => location.hash.slice(1).split('--')[0];
+function editionParts(text, articles = []) {
+  const headings=[]; let offset=0, fenced=false;
+  for(const line of text.split(/(?<=\n)/)) {
+    if(/^```/.test(line)) fenced=!fenced;
+    const m=!fenced && line.match(/^(#{1,3})[ \t]+([^\n\r]+)/);
+    if(m) headings.push({start:offset,level:m[1].length,title:m[2]});
+    offset+=line.length;
+  }
+  const isArticle=h=>/^(?:[①②③④⑤⑥⑦⑧⑨⑩]|(?:第\s*)?[一二三四五六七八九十\d]+\s*(?:[篇、.．：:]|\s*[|｜]))/.test(h.title) || articles.some(a=>[a.title,a.originalTitle].filter(Boolean).some(t=>h.title.includes(t)));
+  const candidates=headings.filter(isArticle);
+  const level=candidates.length?Math.min(...candidates.map(h=>h.level)):2;
+  const boundaries=headings.filter(h=>h.level<=level);
+  const parts=[];
+  if(!boundaries.length) return [{kind:'overview',label:'总体建议',raw:text}];
+  if(boundaries[0].start>0) parts.push({kind:'overview',label:'总体建议',raw:text.slice(0,boundaries[0].start)});
+  let articleIndex=0;
+  boundaries.forEach((h,i)=>{
+    const article=isArticle(h), closing=/阅读建议|阅读顺序|结语|总结|收尾|最后|小结/.test(h.title) && !article;
+    const kind=article?'article':closing?'closing':'overview';
+    parts.push({kind,label:article?`文章 ${++articleIndex}`:closing?'收尾说明':'总体建议',articleIndex:article?articleIndex-1:null,raw:text.slice(h.start,boundaries[i+1]?.start??text.length)});
+  });
+  return parts;
+}
+function editionReader(edition) {
+  const wrapper=el('div',null,'edition-reader'); wrapper.setAttribute('role','region'); wrapper.setAttribute('aria-label','本期完整推荐正文');
+  editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
+    const panel=fullReader(part.raw); panel.classList.add('reading-panel',`reading-${part.kind}`); panel.id=`${edition.date}--section-${i}`; panel.setAttribute('aria-label',part.label);
+    const flag=el('div',null,'section-flag'); flag.append(el('span',part.kind==='article'?String(part.articleIndex+1).padStart(2,'0'):part.kind==='closing'?'END':'READ', 'section-number'),el('span',part.label)); panel.prepend(flag);
+    if(part.kind==='article' && edition.articles[part.articleIndex]) {
+      const article=edition.articles[part.articleIndex], actions=el('div',null,'reading-actions');
+      const link=el('a','阅读原文 ↗'); link.href=urlSafe(article.url); link.target='_blank'; link.rel='noopener noreferrer';
+      const save=el('button',bookmarks.has(article.id)?'★ 已收藏':'☆ 收藏这篇'); save.setAttribute('aria-label',`收藏：${article.title}`); save.setAttribute('aria-pressed',String(bookmarks.has(article.id))); save.onclick=()=>{if(bookmarks.has(article.id))bookmarks.delete(article.id);else bookmarks.add(article.id);saveLocal('ai-reading:saved',[...bookmarks]);render();};
+      actions.append(link,save); panel.append(actions);
+    }
+    wrapper.append(panel);
+  });
+  return wrapper;
+}
 // Safe, dependency-free Markdown display; the original fullText remains unchanged in the feed.
 function inlineMarkdown(node, text) {
   text = text.replace(/\\\n/g,'\n');
@@ -71,6 +110,19 @@ function chooseDate(date) { selected = date; if(date) location.hash = date; rend
 function renderNav() {
   $('dates').replaceChildren();
   for (const day of days) { const b = el('button', null, 'date-button' + (selected === day.date ? ' active' : '')); b.append(el('span', `${day.date.slice(0,4)} · ${formatDate(day.date)}`), el('small', `${day.articles.length} 篇`)); if(selected === day.date) b.setAttribute('aria-current','date'); b.onclick = () => chooseDate(day.date); $('dates').append(b); }
+  const toc=$('edition-nav');
+  if(toc) {
+    toc.replaceChildren(); const edition=days.find(d=>d.date===selected);
+    if(edition?.fullText) {
+      toc.append(el('div','本期目录','toc-heading'));
+      editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
+        const a=el('a',null,'toc-link'); a.href=`#${edition.date}--section-${i}`;
+        a.append(el('span',part.label,'toc-label'));
+        if(part.kind==='article' && edition.articles[part.articleIndex]) a.append(el('small',edition.articles[part.articleIndex].topic));
+        toc.append(a);
+      });
+    }
+  }
   $('topics').replaceChildren();
   for (const name of ['全部', ...new Set(days.flatMap(d => d.articles.map(a => a.topic)))]) { const b = el('button', name, topic === name ? 'active' : ''); b.setAttribute('aria-pressed', String(topic === name)); b.onclick = () => { topic = name; render(); }; $('topics').append(b); }
 }
@@ -104,7 +156,9 @@ function render() {
       const edition=days.find(d=>d.date===date);
       if(edition.fullText) {
         if(global) $('content').append(el('h3',`${date} · 完整推荐`));
-        $('content').append(fullReader(edition.fullText),el('h3','本期原文与收藏','source-heading'));
+        $('content').append(editionReader(edition));
+        if(editionParts(edition.fullText,edition.articles).filter(p=>p.kind==='article').length===edition.articles.length) continue;
+        $('content').append(el('h3','本期原文与收藏','source-heading'));
       }
       for(const item of matches.filter(item=>item.date===date)) $('content').append(card(item.a,item.date,Boolean(edition.fullText)));
     }
@@ -112,16 +166,17 @@ function render() {
 }
 $('search').addEventListener('input',render);
 $('saved').onclick = () => { onlySaved = !onlySaved; $('saved').setAttribute('aria-pressed',String(onlySaved)); render(); };
-window.addEventListener('hashchange', () => { const date = location.hash.slice(1); if(days.some(d => d.date === date)) { selected = date; render(); } });
+window.addEventListener('hashchange', () => { const date = hashDate(); if(days.some(d => d.date === date) && selected!==date) { selected = date; render(); } });
 async function load() {
   try {
     const response = await fetch('./feed.json', {cache:'no-cache'}); if(!response.ok) throw Error('请求失败');
     const feed = await response.json(); days = validFeed(feed);
-    selected = days.some(d => d.date === location.hash.slice(1)) ? location.hash.slice(1) : days[0]?.date || '';
+    selected = days.some(d => d.date === hashDate()) ? hashDate() : days[0]?.date || '';
     $('stats').textContent = `${days.length} 期归档 · ${days.reduce((n,d)=>n+d.articles.length,0)} 篇深度阅读`;
     $('day-count').textContent = `${days.length} 期`;
     if(feed.updatedAt) $('updated').textContent = `最近收录 ${new Date(feed.updatedAt).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})}`;
     $('status').textContent = ''; render();
+    if(location.hash.includes('--section-')) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   } catch { $('status').replaceChildren(el('span','暂时无法载入内容，请检查网络后重试。 ')); const retry = el('button','重新加载'); retry.onclick = load; $('status').append(retry); }
 }
 load();
