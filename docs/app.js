@@ -13,14 +13,16 @@ const urlSafe = value => { try { const url = new URL(value); return ['https:', '
 const formatDate = value => { const parts = value.split('-'); return `${Number(parts[1])}月${Number(parts[2])}日`; };
 // Safe, dependency-free Markdown display; the original fullText remains unchanged in the feed.
 function inlineMarkdown(node, text) {
-  const tokens = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g;
+  text = text.replace(/\\\n/g,'\n');
+  const tokens = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*\n]+\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g;
   let start = 0;
   for (const match of text.matchAll(tokens)) {
     node.append(document.createTextNode(text.slice(start, match.index)));
     const value = match[0];
     if (value.startsWith('`')) node.append(el('code',value.slice(1,-1)));
     else if (value.startsWith('**')) node.append(el('strong',value.slice(2,-2)));
-    else { const m = value.match(/^\[([^\]]+)\]\((.+)\)$/); const a = el('a',m[1]); a.href = urlSafe(m[2]); a.target = '_blank'; a.rel = 'noopener noreferrer'; node.append(a); }
+    else if (value.startsWith('*')) node.append(el('em',value.slice(1,-1)));
+    else { const m = value.match(/^\[([^\]]+)\]\((.+)\)$/); const a = el('a',m[1]); a.href = urlSafe(m[2].replace(/\\&/g,'&')); a.target = '_blank'; a.rel = 'noopener noreferrer'; node.append(a); }
     start = match.index + value.length;
   }
   node.append(document.createTextNode(text.slice(start)));
@@ -78,7 +80,7 @@ function card(article, date, compact = false) {
   top.append(el('span', article.topic, 'topic'), star); node.append(top, el('h3', article.title));
   if(article.originalTitle) node.append(el('p', article.originalTitle, 'original-title'));
   const meta = el('div', null, 'meta');
-  for(const value of [article.source, article.author, article.publishedAt ? `发布于 ${article.publishedAt}` : '发布日期未确认', article.readingMinutes ? `约 ${article.readingMinutes} 分钟` : '阅读时长未确认']) meta.append(el('span', value));
+  for(const value of [article.source, article.author, article.publishedAt ? `发布于 ${article.publishedAt}` : '发布日期未确认', article.readingTimeLabel || (article.readingMinutes ? `约 ${article.readingMinutes} 分钟` : '阅读时长未确认')]) meta.append(el('span', value));
   if(onlySaved || $('search').value.trim()) meta.append(el('span', `收录于 ${date}`));
   node.append(meta);
   if(!compact) {
