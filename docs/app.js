@@ -11,12 +11,52 @@ $('theme').onclick = () => { const next = document.documentElement.dataset.theme
 const el = (tag, text, className) => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
 const urlSafe = value => { try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : null; } catch { return null; } };
 const formatDate = value => { const parts = value.split('-'); return `${Number(parts[1])}月${Number(parts[2])}日`; };
+// Safe, dependency-free Markdown display; the original fullText remains unchanged in the feed.
+function inlineMarkdown(node, text) {
+  const tokens = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^\s)]+\))/g;
+  let start = 0;
+  for (const match of text.matchAll(tokens)) {
+    node.append(document.createTextNode(text.slice(start, match.index)));
+    const value = match[0];
+    if (value.startsWith('`')) node.append(el('code',value.slice(1,-1)));
+    else if (value.startsWith('**')) node.append(el('strong',value.slice(2,-2)));
+    else { const m = value.match(/^\[([^\]]+)\]\((.+)\)$/); const a = el('a',m[1]); a.href = urlSafe(m[2]); a.target = '_blank'; a.rel = 'noopener noreferrer'; node.append(a); }
+    start = match.index + value.length;
+  }
+  node.append(document.createTextNode(text.slice(start)));
+}
+function fullReader(text) {
+  const node = el('section',null,'full-reader'); node.setAttribute('aria-label','本期完整推荐正文');
+  const lines = text.split(/\r?\n/); let i = 0;
+  const special = line => /^(#{1,6}\s|\s*[-*+]\s|\s*\d+\.\s|>\s?|```|\s*$)/.test(line);
+  while(i < lines.length) {
+    const line = lines[i];
+    if(!line.trim()) { i++; continue; }
+    if(line.startsWith('```')) { const block=[]; i++; while(i<lines.length && !lines[i].startsWith('```')) block.push(lines[i++]); if(i<lines.length) i++; const pre=el('pre'); pre.append(el('code',block.join('\n'))); node.append(pre); continue; }
+    const heading=line.match(/^(#{1,6})\s+(.*)$/);
+    if(heading) { const h=el('h'+Math.min(6,heading[1].length+1)); inlineMarkdown(h,heading[2]); node.append(h); i++; continue; }
+    if(/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)) { node.append(el('hr')); i++; continue; }
+    if(i+1<lines.length && line.includes('|') && /^\s*\|?\s*:?-{3,}/.test(lines[i+1])) {
+      const cells=s=>s.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(x=>x.trim());
+      const wrap=el('div',null,'table-scroll'), table=el('table'), head=el('thead'), row=el('tr');
+      for(const value of cells(line)) { const th=el('th'); inlineMarkdown(th,value); row.append(th); } head.append(row); table.append(head); i+=2;
+      const body=el('tbody'); while(i<lines.length && lines[i].includes('|') && lines[i].trim()) { const tr=el('tr'); for(const value of cells(lines[i++])) { const td=el('td'); inlineMarkdown(td,value); tr.append(td); } body.append(tr); } table.append(body); wrap.append(table); node.append(wrap); continue;
+    }
+    const list=line.match(/^\s*(?:([-*+])|(\d+)\.)\s+(.*)$/);
+    if(list) { const ordered=Boolean(list[2]), ul=el(ordered?'ol':'ul'); if(ordered) ul.start=Number(list[2]); while(i<lines.length) { const m=lines[i].match(/^\s*(?:([-*+])|(\d+)\.)\s+(.*)$/); if(!m || Boolean(m[2])!==ordered) break; const li=el('li'); inlineMarkdown(li,m[3]); ul.append(li); i++; } node.append(ul); continue; }
+    if(/^>/.test(line)) { const block=[]; while(i<lines.length && /^>/.test(lines[i])) block.push(lines[i++].replace(/^>\s?/,'')); const quote=el('blockquote'); inlineMarkdown(quote,block.join('\n')); node.append(quote); continue; }
+    const paragraph=[line]; i++; while(i<lines.length && !special(lines[i]) && !(i+1<lines.length && lines[i].includes('|') && /^\s*\|?\s*:?-{3,}/.test(lines[i+1]))) paragraph.push(lines[i++]);
+    const p=el('p'); inlineMarkdown(p,paragraph.join('\n')); node.append(p);
+  }
+  return node;
+}
 function validFeed(feed) {
   if (feed.schemaVersion !== 1 || !Array.isArray(feed.days)) throw Error('数据格式有误');
   const dates = new Set();
   for (const day of feed.days) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(day.date) || dates.has(day.date) || !Array.isArray(day.articles) || !day.articles.length) throw Error('日期或文章列表有误');
     dates.add(day.date);
+    if(day.fullText != null && (typeof day.fullText !== 'string' || !day.fullText.trim())) throw Error('完整正文有误');
     const ids = new Set();
     for (const a of day.articles) {
       if (!a.id || ids.has(a.id) || !urlSafe(a.url) || !['title','topic','source','author','summary','whyRead'].every(k => typeof a[k] === 'string' && a[k].trim()) || !Array.isArray(a.keyPoints) || !a.keyPoints.every(p => typeof p === 'string')) throw Error('文章字段不完整');
@@ -32,7 +72,7 @@ function renderNav() {
   $('topics').replaceChildren();
   for (const name of ['全部', ...new Set(days.flatMap(d => d.articles.map(a => a.topic)))]) { const b = el('button', name, topic === name ? 'active' : ''); b.setAttribute('aria-pressed', String(topic === name)); b.onclick = () => { topic = name; render(); }; $('topics').append(b); }
 }
-function card(article, date) {
+function card(article, date, compact = false) {
   const node = el('article', null, 'card'), top = el('div', null, 'card-top'), key = article.id;
   const star = el('button', bookmarks.has(key) ? '★' : '☆', 'bookmark'); star.setAttribute('aria-label', `收藏：${article.title}`); star.setAttribute('aria-pressed', String(bookmarks.has(key))); star.onclick = () => { if(bookmarks.has(key)) bookmarks.delete(key); else bookmarks.add(key); saveLocal('ai-reading:saved', [...bookmarks]); render(); };
   top.append(el('span', article.topic, 'topic'), star); node.append(top, el('h3', article.title));
@@ -40,9 +80,12 @@ function card(article, date) {
   const meta = el('div', null, 'meta');
   for(const value of [article.source, article.author, article.publishedAt ? `发布于 ${article.publishedAt}` : '发布日期未确认', article.readingMinutes ? `约 ${article.readingMinutes} 分钟` : '阅读时长未确认']) meta.append(el('span', value));
   if(onlySaved || $('search').value.trim()) meta.append(el('span', `收录于 ${date}`));
-  node.append(meta, el('p', article.summary, 'summary'));
+  node.append(meta);
+  if(!compact) {
+  node.append(el('p', article.summary, 'summary'));
   const reason = el('div', null, 'reason'); reason.append(el('strong','为什么值得读'),el('p',article.whyRead)); node.append(reason);
-  if(article.keyPoints.length) { const details = el('details'), list = el('ol', null, 'points'); details.append(el('summary', '展开核心观点')); for(const point of article.keyPoints) list.append(el('li', point)); details.append(list); node.append(details); }
+  if(article.keyPoints.length) { const section = el('section'), list = el('ol', null, 'points'); section.append(el('h4', '核心观点')); for(const point of article.keyPoints) list.append(el('li', point)); section.append(list); node.append(section); }
+  }
   const a = el('a', '阅读原文 ↗', 'article-link'); a.href = urlSafe(article.url); a.target = '_blank'; a.rel = 'noopener noreferrer'; node.append(a); return node;
 }
 function empty(title, message) { const node = el('div',null,'empty'); node.append(el('div','卷','empty-icon'),el('strong',title),el('p',message)); $('content').append(node); }
@@ -50,11 +93,20 @@ function render() {
   renderNav(); $('content').replaceChildren();
   if(!days.length) { empty('第一期，等待与你见面。','每日推荐接入后，这里会按日期保留每一期的摘要、核心观点和推荐理由。'); return; }
   const q = $('search').value.trim().toLocaleLowerCase(), global = Boolean(q || onlySaved);
-  const matches = days.flatMap(d => (!global && d.date !== selected) ? [] : d.articles.filter(a => (topic === '全部' || a.topic === topic) && (!onlySaved || bookmarks.has(a.id)) && (!q || [a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a => ({a,date:d.date})));
+  const matches = days.flatMap(d => (!global && d.date !== selected) ? [] : d.articles.filter(a => (topic === '全部' || a.topic === topic) && (!onlySaved || bookmarks.has(a.id)) && (!q || [d.fullText,a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a => ({a,date:d.date})));
   const heading = el('div',null,'day-heading'); heading.append(el('h2',global ? (onlySaved ? '收藏与搜索' : '搜索结果') : `${formatDate(selected)} · 今日阅读`),el('span', `${matches.length} 篇${global ? ' · 全部归档' : ' · 慢慢读，不着急'}`)); $('content').append(heading);
   const day = days.find(d => d.date === selected); if(!global && day?.intro) $('content').append(el('p',day.intro,'day-intro'));
   if(!matches.length) empty('这里暂时没有文章。', onlySaved ? '点击文章右上角的星标，即可加入收藏。收藏保存在当前浏览器。' : '换个关键词或主题，再找一找。');
-  else for(const item of matches) $('content').append(card(item.a,item.date));
+  else {
+    for(const date of [...new Set(matches.map(item=>item.date))]) {
+      const edition=days.find(d=>d.date===date);
+      if(edition.fullText) {
+        if(global) $('content').append(el('h3',`${date} · 完整推荐`));
+        $('content').append(fullReader(edition.fullText),el('h3','本期原文与收藏','source-heading'));
+      }
+      for(const item of matches.filter(item=>item.date===date)) $('content').append(card(item.a,item.date,Boolean(edition.fullText)));
+    }
+  }
 }
 $('search').addEventListener('input',render);
 $('saved').onclick = () => { onlySaved = !onlySaved; $('saved').setAttribute('aria-pressed',String(onlySaved)); render(); };
