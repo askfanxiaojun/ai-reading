@@ -114,6 +114,7 @@ function chooseDate(date) {
   selected = date; calendarMonth = date.slice(0,7); resetFilters();
   if(date) history.pushState(null,'',`#${date}`);
   render();
+  $('content').scrollIntoView({block:'start'});
 }
 function renderCalendar() {
   const nav=$('dates'); nav.replaceChildren();
