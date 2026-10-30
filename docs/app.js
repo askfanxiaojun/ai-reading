@@ -4,7 +4,7 @@ const readLocal = (key, fallback) => { try { return JSON.parse(localStorage.getI
 const saveLocal = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Reading works without storage. */ } };
 const stored = readLocal('ai-reading:saved', []);
 const bookmarks = new Set(Array.isArray(stored) ? stored.filter(x => typeof x === 'string') : []);
-let days = [], selected = '', topic = '全部', onlySaved = false, calendarMonth = '';
+let days = [], selected = '', onlySaved = false, calendarMonth = '';
 let sectionObserver;
 const preferredTheme = readLocal('ai-reading:theme', null);
 document.documentElement.dataset.theme = preferredTheme === 'dark' || (preferredTheme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
@@ -108,7 +108,7 @@ function validFeed(feed) {
   return feed.days.slice().sort((a,b) => b.date.localeCompare(a.date));
 }
 function resetFilters() {
-  topic = '全部'; onlySaved = false; $('search').value = ''; $('saved').setAttribute('aria-pressed','false');
+  onlySaved = false; $('search').value = ''; $('saved').setAttribute('aria-pressed','false');
 }
 function chooseDate(date) {
   selected = date; calendarMonth = date.slice(0,7); resetFilters();
@@ -152,10 +152,24 @@ function renderCalendar() {
   }
   nav.append(grid,el('p','● 有推荐   ·   实心为当前选中','calendar-legend'));
 }
+// Directory labels are plain text; the reading body keeps its original Markdown.
+function plainTitle(text) {
+  return text
+    .replace(/!?\[([^\]]+)\]\((?:\\.|[^()\\]|\([^()]*\))*\)/g,'$1')
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g,'$1')
+    .replace(/<[^>]*>/g,'')
+    .replace(/https?:\/\/\S+/g,'')
+    .replace(/\\([\[\]()*_~`])/g,'$1')
+    .replace(/[*_~`]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
 function partTitle(part, edition) {
-  if(part.kind!=='article') return part.label;
+  if(part.kind!=='article') return plainTitle(part.label);
   const heading=part.raw.match(/^#{1,3}\s+(.+)$/m)?.[1];
-  return heading?.split(/[｜|]/).pop().replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, '').replace(/\*\*/g,'').trim() || edition.articles[part.articleIndex]?.title || part.label;
+  const title=plainTitle(heading || edition.articles[part.articleIndex]?.title || part.label);
+  return title.split(/[｜|]/).pop()
+    .replace(/^(?:[①②③④⑤⑥⑦⑧⑨⑩]\s*|(?:第\s*)?[一二三四五六七八九十\d]+\s*[篇、.．：:]\s*)/,'')
+    .trim();
 }
 function jumpToSection(id) {
   const date=id.split('--')[0];
@@ -196,8 +210,7 @@ function renderNav() {
       });
     }
   }
-  $('topics').replaceChildren();
-  for (const name of ['全部', ...new Set(days.flatMap(d => d.articles.map(a => a.topic)))]) { const b = el('button', name, topic === name ? 'active' : ''); b.setAttribute('aria-pressed', String(topic === name)); b.onclick = () => { topic = name; render(); }; $('topics').append(b); }
+
 }
 function card(article, date, compact = false) {
   const node = el('article', null, 'card'), top = el('div', null, 'card-top'), key = article.id;
@@ -220,7 +233,7 @@ function render() {
   renderNav(); $('content').replaceChildren();
   if(!days.length) { empty('第一期，等待与你见面。','每日推荐接入后，这里会按日期保留每一期的摘要、核心观点和推荐理由。'); return; }
   const q = $('search').value.trim().toLocaleLowerCase(), global = Boolean(q || onlySaved);
-  const matches = days.flatMap(d => (!global && d.date !== selected) ? [] : d.articles.filter(a => (topic === '全部' || a.topic === topic) && (!onlySaved || bookmarks.has(a.id)) && (!q || [d.fullText,a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a => ({a,date:d.date})));
+  const matches = days.flatMap(d => (!global && d.date !== selected) ? [] : d.articles.filter(a => (!onlySaved || bookmarks.has(a.id)) && (!q || [d.fullText,a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a => ({a,date:d.date})));
   const heading = el('div',null,'day-heading'); heading.append(el('h2',global ? (onlySaved ? '收藏与搜索' : '搜索结果') : `${formatDate(selected)} · 今日阅读`),el('span', `${matches.length} 篇${global ? ' · 全部归档' : ' · 慢慢读，不着急'}`)); $('content').append(heading);
   const day = days.find(d => d.date === selected); if(!global && day?.intro) $('content').append(el('p',day.intro,'day-intro'));
   if(!matches.length) empty('这里暂时没有文章。', onlySaved ? '点击文章右上角的星标，即可加入收藏。收藏保存在当前浏览器。' : '换个关键词或主题，再找一找。');
