@@ -25,7 +25,7 @@ function editionParts(text, articles = []) {
   // A heading such as "三篇放在一起" is a conclusion, never a fourth article.
   const closingTitle = title => /^(?:三篇放在一起|三篇文章|跨文章|本期|总体|最后|结语|总结|收尾|阅读建议|阅读顺序)/.test(plainTitle(title));
   const isArticle = h => !closingTitle(h.title) && (
-    /^(?:[①②③]|(?:第\\s*)?[123一二三]\\s*[.、．:：]|第\\s*[一二三123]\\s*篇\\s*[：:、.．])/.test(h.title) ||
+    /^(?:[①②③]|(?:第\s*)?[123一二三]\s*[.、．:：]|第\s*[一二三123]\s*篇\s*[：:、.．])/.test(h.title) ||
     articles.some(a => [a.title,a.originalTitle].filter(Boolean).some(t => plainTitle(h.title).includes(t)))
   );
   const candidates=headings.filter(isArticle);
@@ -218,7 +218,8 @@ function renderNav() {
       toc.append(el('div','本期目录','toc-heading'));
       editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
         const a=el('a',null,'toc-link'); a.href=`#${edition.date}--section-${i}`;
-        a.append(el('span',part.kind==='closing'?'本期总结':partTitle(part,edition),'toc-label'));\n        if(part.kind==='closing') a.classList.add('toc-conclusion');
+        a.append(el('span',part.kind==='closing'?'本期总结':partTitle(part,edition),'toc-label'));
+        if(part.kind==='closing') a.classList.add('toc-conclusion');
         if(part.kind==='article') a.prepend(el('span',String(part.articleIndex+1).padStart(2,'0'),'toc-number'));
         a.onclick=event=>{event.preventDefault();history.pushState(null,'',a.getAttribute('href'));jumpToSection(`${edition.date}--section-${i}`);};
         if(part.kind==='article' && edition.articles[part.articleIndex]) a.append(el('small',edition.articles[part.articleIndex].topic));
