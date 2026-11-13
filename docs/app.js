@@ -36,7 +36,7 @@ function editionParts(text, articles = []) {
   if(boundaries[0].start>0) parts.push({kind:'overview',label:'总体建议',raw:text.slice(0,boundaries[0].start)});
   let articleIndex=0;
   boundaries.forEach((h,i)=>{
-    const article=isArticle(h), closing=/阅读建议|阅读顺序|结语|总结|收尾|最后|小结/.test(h.title) && !article;
+    const article=isArticle(h), closing=(closingTitle(h.title) || /阅读建议|阅读顺序|结语|总结|收尾|最后|小结/.test(h.title)) && !article;
     const kind=article?'article':closing?'closing':'overview';
     parts.push({kind,label:article?`文章 ${++articleIndex}`:closing?'收尾说明':'总体建议',articleIndex:article?articleIndex-1:null,raw:text.slice(h.start,boundaries[i+1]?.start??text.length)});
   });
