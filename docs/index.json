@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-13T07:06:07+08:00",
+  "updatedAt": "2026-11-14T07:01:09+08:00",
   "days": [
+    {
+      "date": "2026-11-14",
+      "intro": "本期从体验层、组织层和经营层审视 Agent 产品：如何用解释、证据、控制与恢复建立信任；如何在 AI 加速工程后重组发现与交付；以及如何用有边界的工作流证据替代模型名望驱动的决策。",
+      "path": "archive/2026/11/2026-11-14.json",
+      "revision": "2026-11-14T07:01:09+08:00",
+      "articles": [
+        {
+          "id": "https://www.habitat.cc/blog/ai-agent-interface-design-best-practices",
+          "title": "Agent 界面设计的四条原则：别为“完美 AI”设计",
+          "originalTitle": "Habitat designer shares his best practices for designing AI agent interfaces",
+          "url": "https://www.habitat.cc/blog/ai-agent-interface-design-best-practices",
+          "topic": "Agent 产品与 AI 用户体验",
+          "source": "Habitat",
+          "author": "Dmytro Dedukh",
+          "publishedAt": "2026-11-12",
+          "readingMinutes": 8,
+          "summary": "传统 SaaS 预先规定路径，而 Agent 接受目标后自行选择步骤、工具与执行顺序，因此界面必须从页面编排转向人与行动型系统的协作设计。文章以解释、证据、控制和失败恢复四条原则组织实践：按任务复杂度显示进度或计划，让重要结论可追溯到来源和工具结果，按风险与可逆性配置渐进自主，并在部分失败时保留已完成工作、明确失败边界和下一步。文中的 Cursor、Notion、Copilot 与 Adair 案例说明 Agent 不等于聊天框，也可以是可编辑计划、内联操作、权限面板和任务生成式界面。落地时应区分用户决策信息、客观审计记录和内部调试细节，并用工具超时、证据冲突、部分成功等异常态测试体验，而不只画理想路径。",
+          "keyPoints": [
+            "用解释、证据、控制、恢复四层检查 Agent 的完整用户旅程",
+            "自主权应随行动后果和可逆性变化，避免擅自执行与逐步审批两个极端",
+            "失败设计要保留部分成功，说明可信边界，并提供继续、撤销或转人工入口",
+            "信任来自可核验来源和变更记录，不来自模型流畅或自信的语气"
+          ],
+          "whyRead": "文章把抽象的信任问题转成可直接用于原型评审的界面责任，尤其适合检查计划、进度、证据、暂停、局部重做和异常恢复。它能帮助 AI 产品经理避免把 Agent 简化成聊天框，也避免把用户变成连续批准每一步的监工。"
+        },
+        {
+          "id": "https://www.theagenticcpo.ai/essays/discovery-and-delivery-pods",
+          "title": "先跑发现，再做交付：AI 加速后，团队瓶颈会移到“定义正确的工作”",
+          "originalTitle": "Run ahead, then ship: discovery and delivery pods",
+          "url": "https://www.theagenticcpo.ai/essays/discovery-and-delivery-pods/",
+          "topic": "AI 产品组织与 Agent 交付",
+          "source": "The Agentic CPO",
+          "author": "Jason Palmer",
+          "publishedAt": "2026-11-12",
+          "readingMinutes": 11,
+          "summary": "AI 往往先提高工程产能，使产品团队的瓶颈从实现转向问题发现、决策、规格与质量定义。文章提出发现 Pod 与交付 Pod 并行：发现 Pod 提前四到六周与客户共创者验证问题和原型，证明难点可行，并产出面向人的规格、面向 Agent 的机器可读规格以及由真实案例构成的评测集；两到五人的交付 Pod 负责工程化、生产质量和分阶段上线。Pod 由问题、共同结果和决策护栏构成，交接应是有书面标准的门，而不是一次会议。框架不适合无差别套用：重大押注使用专门发现，小功能在交付 Pod 内发现，技术债由技术团队处理。实际采用时还要防止形成新的上游决策者与下游执行者分层，并用真实等待、返工和采用数据验证组织调整。",
+          "keyPoints": [
+            "工程变快后，限制吞吐的往往是成熟问题、客户证据、可执行规格和评测集",
+            "发现 Pod 提前验证方向，交付 Pod 小规模复制并把方案做到生产质量",
+            "书面交接门要求客户测试、双层规格、覆盖案例的评测集和已证明的构建模式",
+            "并非所有工作都需要重型发现，应按押注规模和风险选择组织方式"
+          ],
+          "whyRead": "它讨论了 Agent 工具真正提高产能后组织会在哪里失灵，并给出角色、产出物和质量门槛，而不是停留在口号。产品与研发负责人可以先在一个重大功能上试行发现领先、双层规格和评测前置，再用返工、等待和客户采用数据决定是否扩展。"
+        },
+        {
+          "id": "https://updates.shivam.consulting/2026/11/11/a-product-leaders-reality-check-for-ai-models-and-agents",
+          "title": "AI 模型与 Agent 的产品负责人现实校验：购买工作流证据，而不是模型名望",
+          "originalTitle": "A Product Leader’s Reality Check for AI Models and Agents",
+          "url": "https://updates.shivam.consulting/2026/11/11/a-product-leaders-reality-check-for-ai-models-and-agents/",
+          "topic": "AI 产品策略与生产治理",
+          "source": "Shivam.Consulting Blog",
+          "author": "Shivam Tiwari",
+          "publishedAt": "2026-11-11",
+          "readingMinutes": 9,
+          "summary": "文章把模型、Agent、工作流和运行体系拆为四个会以不同方式失败的层次，主张产品负责人购买的是有边界工作流在普通故障下仍改善业务结果的证据，而非模型名望。模型要看代表性输入，Agent 要看工具、重试、权限和恢复轨迹，工作流要与现状比较质量、时间、成本、人工和风险，运行体系要有监控、升级、回滚与负责人。多 Agent 默认增加协调成本，应从单 Agent 加确定性工具开始，只有角色、权限和接口明确且端到端结果更好时才拆分。试点应定义有边界的工作、建立现状基线、构建含模糊与失败案例的评测集、先跑影子模式、按后果与可逆性逐级授权，并提前规定停机和人工续接。治理强度也要随阶段与风险增长，避免让低风险探索过重。",
+          "keyPoints": [
+            "分别评估模型、Agent、工作流和运行体系，不用一次漂亮输出替代生产证据",
+            "默认从一个 Agent 加确定性工具开始，新增 Agent 必须证明端到端收益",
+            "以结果契约定义工作边界、现状基线、证据集、授权阶梯、运行责任和单位经济",
+            "从影子模式开始，按行动后果和可逆性逐步扩大权限，并预先定义停机与回滚"
+          ],
+          "whyRead": "这篇文章为预算、采购、试点和上线评审提供了一套共同语言，让产品、工程、运营、安全不再只争论模型强弱，而是一起检查工作边界、完整轨迹、人工救火、单位经济和失败责任。它特别适合把模糊的“做个 Agent POC”变成可批准、可否决、可分阶段升级的结果契约。"
+        }
+      ]
+    },
     {
       "date": "2026-11-13",
       "intro": "本期从生成式跨端界面、人在回路的决策与权限设计，以及约 500 人规模下的 AI 能力推广三个方向，讨论 Agent 产品怎样从能完成任务走向可理解、可控制、可规模化。",
