@@ -78,7 +78,7 @@ def atomic_json(path, data):
         Path(tmp).unlink(missing_ok=True)
 
 
-def merge_index(index, day, path, revision):
+def merge_index(index, day, path, revision, content_changed=False):
     if index.get('schemaVersion') != 1 or index.get('storageMode') != 'daily-archive-v1' or not isinstance(index.get('days'), list):
         raise ValueError('unsupported index schema')
     new_urls, new_ids = validate_day(day, require_full_text=True)
@@ -101,7 +101,7 @@ def merge_index(index, day, path, revision):
         'articles': day['articles'],
     }
     previous = next((x for x in index['days'] if x['date'] == day['date']), None)
-    if previous is not None and all(previous.get(k) == item[k] for k in ('date','intro','path','articles')):
+    if not content_changed and previous is not None and all(previous.get(k) == item[k] for k in ('date','intro','path','articles')):
         return index
     result = dict(index)
     result['updatedAt'] = revision
@@ -127,7 +127,7 @@ def main():
         validate_day(old_day, require_full_text=True)
 
     revision = dt.datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(timespec='seconds')
-    new_index = merge_index(index, day, relative_path, revision)
+    new_index = merge_index(index, day, relative_path, revision, content_changed=old_day != day)
     if old_day == day and new_index == index:
         print('Unchanged: this digest is already published.')
         return
