@@ -5,6 +5,7 @@ const saveLocal = (key, value) => { try { localStorage.setItem(key, JSON.stringi
 const stored = readLocal('ai-reading:saved', []);
 const bookmarks = new Set(Array.isArray(stored) ? stored.filter(x => typeof x === 'string') : []);
 let days = [], selected = '', onlySaved = false, calendarMonth = '';
+const editionCache = new Map(), editionRequests = new Map(), editionErrors = new Map();
 let sectionObserver;
 const preferredTheme = readLocal('ai-reading:theme', null);
 document.documentElement.dataset.theme = preferredTheme === 'dark' || (preferredTheme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
@@ -123,6 +124,31 @@ function validFeed(feed) {
   }
   return feed.days.slice().sort((a,b) => b.date.localeCompare(a.date));
 }
+// Only the date index is loaded initially. Complete editions are fetched on demand.
+async function ensureEdition(date) {
+  if (editionCache.has(date)) return editionCache.get(date);
+  if (editionRequests.has(date)) return editionRequests.get(date);
+  const entry=days.find(d=>d.date===date);
+  if(!entry) throw Error('日期不存在');
+  editionErrors.delete(date);
+  const task=(async()=>{
+    const path=entry.path || `archive/${date.slice(0,4)}/${date.slice(5,7)}/${date}.json`;
+    const response=await fetch('./'+path+'?v='+encodeURIComponent(entry.revision||date));
+    if(!response.ok) throw Error('正文请求失败');
+    const edition=await response.json();
+    if(edition.date!==date || typeof edition.fullText!=='string' || !edition.fullText.trim() || !Array.isArray(edition.articles)) throw Error('正文格式有误');
+    if(edition.articles.length!==entry.articles.length || edition.articles.some((a,i)=>a.id!==entry.articles[i].id)) throw Error('正文与索引不一致');
+    editionCache.set(date,edition);
+    return edition;
+  })();
+  editionRequests.set(date,task);
+  try { return await task; }
+  catch(error) {editionErrors.set(date,error.message||'载入失败');throw error;}
+  finally {
+    editionRequests.delete(date);
+    if(selected===date && !$('search').value.trim() && !onlySaved) render();
+  }
+}
 function resetFilters() {
   onlySaved = false; $('search').value = ''; $('saved').setAttribute('aria-pressed','false');
 }
@@ -213,7 +239,7 @@ function renderNav() {
   renderCalendar();
   const toc=$('edition-nav');
   if(toc) {
-    toc.replaceChildren(); const edition=days.find(d=>d.date===selected);
+    toc.replaceChildren(); const edition=editionCache.get(selected);
     if(edition?.fullText) {
       toc.append(el('div','本期目录','toc-heading'));
       editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
@@ -243,30 +269,44 @@ function card(article, date, compact = false) {
   const reason = el('div', null, 'reason'); reason.append(el('strong','为什么值得读'),el('p',article.whyRead)); node.append(reason);
   if(article.keyPoints.length) { const section = el('section'), list = el('ol', null, 'points'); section.append(el('h4', '核心观点')); for(const point of article.keyPoints) list.append(el('li', point)); section.append(list); node.append(section); }
   }
-  const a = el('a', '阅读原文 ↗', 'article-link'); a.href = urlSafe(article.url); a.target = '_blank'; a.rel = 'noopener noreferrer'; node.append(a); return node;
+  const actions=el('div',null,'reading-actions');
+  const open=el('a','查看本期完整解读','article-link');open.href='#'+date;
+  open.onclick=event=>{event.preventDefault();chooseDate(date);};
+  const a=el('a','阅读原文 ↗','article-link');a.href=urlSafe(article.url);a.target='_blank';a.rel='noopener noreferrer';
+  actions.append(open,a);node.append(actions);return node;
 }
 function empty(title, message) { const node = el('div',null,'empty'); node.append(el('div','卷','empty-icon'),el('strong',title),el('p',message)); $('content').append(node); }
 function render() {
   renderNav(); $('content').replaceChildren();
-  if(!days.length) { empty('第一期，等待与你见面。','每日推荐接入后，这里会按日期保留每一期的摘要、核心观点和推荐理由。'); return; }
-  const q = $('search').value.trim().toLocaleLowerCase(), global = Boolean(q || onlySaved);
-  const matches = days.flatMap(d => (!global && d.date !== selected) ? [] : d.articles.filter(a => (!onlySaved || bookmarks.has(a.id)) && (!q || [d.fullText,a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a => ({a,date:d.date})));
-  const heading = el('div',null,'day-heading'); heading.append(el('h2',global ? (onlySaved ? '收藏与搜索' : '搜索结果') : `${formatDate(selected)} · 今日阅读`),el('span', `${matches.length} 篇${global ? ' · 全部归档' : ' · 慢慢读，不着急'}`)); $('content').append(heading);
-  const day = days.find(d => d.date === selected); if(!global && day?.intro) $('content').append(el('p',day.intro,'day-intro'));
-  if(!matches.length) empty('这里暂时没有文章。', onlySaved ? '点击文章右上角的星标，即可加入收藏。收藏保存在当前浏览器。' : '换个关键词或主题，再找一找。');
-  else {
-    for(const date of [...new Set(matches.map(item=>item.date))]) {
-      const edition=days.find(d=>d.date===date);
-      if(edition.fullText) {
-        if(global) $('content').append(el('h3',`${date} · 完整推荐`));
-        $('content').append(editionReader(edition));
-        if(editionParts(edition.fullText,edition.articles).filter(p=>p.kind==='article').length===edition.articles.length) continue;
-        $('content').append(el('h3','本期原文与收藏','source-heading'));
-      }
-      for(const item of matches.filter(item=>item.date===date)) $('content').append(card(item.a,item.date,Boolean(edition.fullText)));
-    }
+  if(!days.length) { empty('第一期，等待与你见面。','每日推荐接入后，这里会按日期保留完整解读。'); return; }
+  const q=$('search').value.trim().toLocaleLowerCase(), global=Boolean(q||onlySaved);
+  const matches=days.flatMap(d=>d.articles.filter(a=>(!onlySaved||bookmarks.has(a.id))&&(!q||[a.title,a.originalTitle,a.topic,a.source,a.author,a.summary,a.whyRead,...a.keyPoints].join(' ').toLocaleLowerCase().includes(q))).map(a=>({a,date:d.date})));
+  const heading=el('div',null,'day-heading');
+  const shown=global?matches:days.find(d=>d.date===selected)?.articles||[];
+  heading.append(el('h2',global?(onlySaved?'收藏与搜索':'搜索结果'):`${formatDate(selected)} · 今日阅读`),el('span',`${shown.length} 篇${global?' · 全部归档':' · 慢慢读，不着急'}`));
+  $('content').append(heading);
+  if(global) {
+    if(!matches.length) {empty('这里暂时没有文章。',onlySaved?'点击文章的收藏按钮，即可加入收藏。':'换个关键词或主题，再找一找。');return;}
+    for(const item of matches) $('content').append(card(item.a,item.date));
+    return;
   }
-  observeSections();
+  const day=days.find(d=>d.date===selected);
+  if(day?.intro) $('content').append(el('p',day.intro,'day-intro'));
+  const edition=editionCache.get(selected);
+  if(edition) {
+    $('content').append(editionReader(edition));
+    if(editionParts(edition.fullText,edition.articles).filter(p=>p.kind==='article').length!==edition.articles.length) {
+      $('content').append(el('h3','本期原文与收藏','source-heading'));
+      for(const a of edition.articles) $('content').append(card(a,selected,true));
+    }
+    observeSections();
+  } else if(editionErrors.has(selected)) {
+    const warning=el('div',null,'empty');warning.append(el('strong','本期正文暂时无法加载'),el('p',editionErrors.get(selected)));
+    const retry=el('button','重新加载');retry.onclick=()=>{editionErrors.delete(selected);render();};warning.append(retry);$('content').append(warning);
+  } else {
+    $('content').append(el('p','正在载入本期完整正文…','day-intro'));
+    void ensureEdition(selected).catch(()=>{});
+  }
 }
 $('search').addEventListener('input',render);
 $('saved').onclick = () => { onlySaved = !onlySaved; $('saved').setAttribute('aria-pressed',String(onlySaved)); render(); };
@@ -278,8 +318,8 @@ window.addEventListener('hashchange', () => {
 });
 async function load() {
   try {
-    const response = await fetch('./feed.json', {cache:'no-cache'}); if(!response.ok) throw Error('请求失败');
-    const feed = await response.json(); days = validFeed(feed);
+    const response = await fetch('./index.json', {cache:'no-cache'}); if(!response.ok) throw Error('请求失败');
+    const feed = await response.json(); if(feed.storageMode!=='daily-archive-v1') throw Error('索引版本不支持'); days = validFeed(feed);
     selected = days.some(d => d.date === hashDate()) ? hashDate() : days[0]?.date || '';
     $('stats').textContent = `${days.length} 期归档 · ${days.reduce((n,d)=>n+d.articles.length,0)} 篇深度阅读`;
     $('day-count').textContent = `${days.length} 期`;
