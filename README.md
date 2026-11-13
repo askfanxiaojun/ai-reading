@@ -2,25 +2,31 @@
 
 [打开网站](https://askfanxiaojun.github.io/ai-reading/)
 
-每日三篇 AI 与产品深度阅读，按日期归档，支持全文搜索、主题筛选、浏览器收藏和深浅色模式。
+每天推荐三篇 AI 与产品深度文章，保留每一期在 ChatGPT 对话中展示的完整 Markdown 解读。支持按日期归档、文章标题/元数据/摘要/关键观点搜索、浏览器本地收藏和深浅色模式。
 
-## 发布状态
+## 数据架构：方案 C（轻量索引 + 每日正文）
 
-GitHub Pages 已启用，发布源为 main 分支 /docs 目录，HTTPS 已开启。2026-10-20 首期三篇内容已发布并通过线上读取与交互验证；本期沿用原推荐选题，摘要根据可核实来源重新整理。
+静态网站托管在 GitHub Pages；如果绑定 Cloudflare Pages，同样可以直接使用 main 分支的 `docs` 目录，不需要数据库和后端。
 
-现有 ChatGPT「推荐AI产品文章」任务已增加 GitHub 归档指令，保留原有每日上午 9 点附近的运行安排与筛选规则。首次无人值守运行仍待后续执行验证，不能把本次交互中的发布测试等同于后台任务已成功运行。未来任务若缺少 GitHub 写入能力，应明确报告同步失败并保留完整推荐。
+- `docs/index.json`：日期、文章元数据、摘要、关键观点及每日文件位置，不含任何完整 `fullText`。
+- `docs/archive/YYYY/MM/YYYY-MM-DD.json`：单日完整三篇推荐（保留 `fullText` 原文、元数据和介绍）。
+- `docs/app.js`：首屏只加载索引和当前日期正文；切换日期时按需请求对应分片，并缓存已读日期；搜索/收藏直接利用索引，不批量下载全部历史正文。
+- 日期链接继续使用 `#YYYY-MM-DD`；收藏的本地存储文章 ID 不变，不会因拆分丢失。
+- 搜索覆盖元数据与摘要，不执行跨历史正文全文检索；如果未来需要全文章搜索，再新增分片倒排索引。
 
-## 内容与更新
+不要重新创建或写入 `docs/feed.json`。发布规范与完整正文要求见 [CONTENT_CONTRACT.md](CONTENT_CONTRACT.md)。
 
-唯一公开内容文件是 `docs/feed.json`，数据规范见 [CONTENT_CONTRACT.md](CONTENT_CONTRACT.md)。更新内容时保留其他全部日期，携带 GitHub 当前文件 SHA 进行更新，发生冲突应重新读取合并；不要覆盖历史。发布存在短暂延迟。
+## 发布新的每日推荐
 
-可选本地发布：
+已连接 GitHub 的 ChatGPT 自动化应先创建/更新单日 archive 文件（并读回检查），再更新轻量索引（保留全部已有日期）。若同一天重复发布，仅替换当天，不清空历史；利用最新文件 SHA 避免冲突。索引的 `revision` 用于变更后刷新日期正文缓存。
+
+本地还可以用无需凭证、无网络访问的验证和发布脚本：
 
 ```sh
 python3 scripts/publish_digest.py /absolute/path/to/digest.json
 ```
 
-脚本校验恰好三篇、规范化链接去重、同日重跑幂等，以及失败时保留原文件。脚本不联网、不执行提交。
+该脚本校验恰好三篇、历史链接去重、完整正文、同日重跑幂等；先原子写入单日文件，再原子更新 `docs/index.json`。它**不会自动提交到 GitHub**，需要使用 Git 提交改动。
 
 ## 本地查看
 
@@ -28,4 +34,4 @@ python3 scripts/publish_digest.py /absolute/path/to/digest.json
 python3 -m http.server 8000 --directory docs
 ```
 
-访问 http://localhost:8000 。网页没有模型 API Key 或构建依赖。内容按纯文本渲染，只提供摘要、解读与来源链接，不转载原文全文。收藏保存在当前浏览器，不跨设备同步。
+访问 http://localhost:8000 。完整解读按原文存储，不转载来源文章全文。收藏仅保存在当前浏览器，不能跨设备同步。
