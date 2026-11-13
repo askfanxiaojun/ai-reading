@@ -21,7 +21,13 @@ function editionParts(text, articles = []) {
     if(m) headings.push({start:offset,level:m[1].length,title:m[2]});
     offset+=line.length;
   }
-  const isArticle=h=>/^(?:[①②③④⑤⑥⑦⑧⑨⑩]|(?:第\s*)?[一二三四五六七八九十\d]+\s*(?:[篇、.．：:]|\s*[|｜]))/.test(h.title) || articles.some(a=>[a.title,a.originalTitle].filter(Boolean).some(t=>h.title.includes(t)));
+  // Only explicit article ordinals or an archived article title count as an article.
+  // A heading such as "三篇放在一起" is a conclusion, never a fourth article.
+  const closingTitle = title => /^(?:三篇放在一起|三篇文章|跨文章|本期|总体|最后|结语|总结|收尾|阅读建议|阅读顺序)/.test(plainTitle(title));
+  const isArticle = h => !closingTitle(h.title) && (
+    /^(?:[①②③]|(?:第\\s*)?[123一二三]\\s*[.、．:：]|第\\s*[一二三123]\\s*篇\\s*[：:、.．])/.test(h.title) ||
+    articles.some(a => [a.title,a.originalTitle].filter(Boolean).some(t => plainTitle(h.title).includes(t)))
+  );
   const candidates=headings.filter(isArticle);
   const level=candidates.length?Math.min(...candidates.map(h=>h.level)):2;
   const boundaries=headings.filter(h=>h.level<=level);
@@ -39,12 +45,22 @@ function editionParts(text, articles = []) {
 function editionReader(edition) {
   const wrapper=el('div',null,'edition-reader'); wrapper.setAttribute('role','region'); wrapper.setAttribute('aria-label','本期完整推荐正文');
   editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
-    const panel=fullReader(part.raw); panel.classList.add('reading-panel',`reading-${part.kind}`); panel.id=`${edition.date}--section-${i}`; panel.setAttribute('aria-label',part.label);
-    const flag=el('div',null,'section-flag'); flag.append(el('span',part.kind==='article'?String(part.articleIndex+1).padStart(2,'0'):part.kind==='closing'?'END':'READ', 'section-number'),el('span',part.label)); panel.prepend(flag);
+    const panel=fullReader(part.raw);
+    const conclusion=part.kind==='closing';
+    panel.classList.add(conclusion?'reading-conclusion':'reading-panel');
+    if(!conclusion) panel.classList.add(`reading-${part.kind}`);
+    panel.id=`${edition.date}--section-${i}`;
+    panel.setAttribute('aria-label',part.label);
+    if(!conclusion) {
+      const flag=el('div',null,'section-flag');
+      flag.append(el('span',part.kind==='article'?String(part.articleIndex+1).padStart(2,'0'):'READ','section-number'),el('span',part.label));
+      panel.prepend(flag);
+    }
     if(part.kind==='article' && edition.articles[part.articleIndex]) {
       const article=edition.articles[part.articleIndex], actions=el('div',null,'reading-actions');
       const link=el('a','阅读原文 ↗'); link.href=urlSafe(article.url); link.target='_blank'; link.rel='noopener noreferrer';
-      const save=el('button',bookmarks.has(article.id)?'★ 已收藏':'☆ 收藏这篇'); save.setAttribute('aria-label',`收藏：${article.title}`); save.setAttribute('aria-pressed',String(bookmarks.has(article.id))); save.onclick=()=>{if(bookmarks.has(article.id))bookmarks.delete(article.id);else bookmarks.add(article.id);saveLocal('ai-reading:saved',[...bookmarks]);render();};
+      const save=el('button',bookmarks.has(article.id)?'★ 已收藏':'☆ 收藏这篇'); save.setAttribute('aria-label',`收藏：${article.title}`); save.setAttribute('aria-pressed',String(bookmarks.has(article.id)));
+      save.onclick=()=>{if(bookmarks.has(article.id))bookmarks.delete(article.id);else bookmarks.add(article.id);saveLocal('ai-reading:saved',[...bookmarks]);render();};
       actions.append(link,save); panel.append(actions);
     }
     wrapper.append(panel);
@@ -191,7 +207,7 @@ function observeSections() {
   sectionObserver=new IntersectionObserver(entries=>{
     for(const entry of entries) if(entry.isIntersecting) setActiveSection(entry.target.id);
   },{rootMargin:'-5% 0px -65% 0px',threshold:0});
-  document.querySelectorAll('.reading-panel').forEach(panel=>sectionObserver.observe(panel));
+  document.querySelectorAll('.reading-panel, .reading-conclusion').forEach(panel=>sectionObserver.observe(panel));
 }
 function renderNav() {
   renderCalendar();
@@ -202,7 +218,7 @@ function renderNav() {
       toc.append(el('div','本期目录','toc-heading'));
       editionParts(edition.fullText,edition.articles).forEach((part,i)=>{
         const a=el('a',null,'toc-link'); a.href=`#${edition.date}--section-${i}`;
-        a.append(el('span',partTitle(part,edition),'toc-label'));
+        a.append(el('span',part.kind==='closing'?'本期总结':partTitle(part,edition),'toc-label'));\n        if(part.kind==='closing') a.classList.add('toc-conclusion');
         if(part.kind==='article') a.prepend(el('span',String(part.articleIndex+1).padStart(2,'0'),'toc-number'));
         a.onclick=event=>{event.preventDefault();history.pushState(null,'',a.getAttribute('href'));jumpToSection(`${edition.date}--section-${i}`);};
         if(part.kind==='article' && edition.articles[part.articleIndex]) a.append(el('small',edition.articles[part.articleIndex].topic));
