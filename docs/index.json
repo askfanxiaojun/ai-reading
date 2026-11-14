@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-14T07:03:05+08:00",
+  "updatedAt": "2026-11-15T07:05:58+08:00",
   "days": [
+    {
+      "date": "2026-11-15",
+      "intro": "今天的三篇文章分别聚焦 Agent 记忆治理、主观规则的人机共同澄清，以及多 Agent 协作中的独立验证。共同主题是：AI 产品的下一阶段差异不只来自模型更强，而来自记忆、判断与验证能否被做成可治理系统。",
+      "path": "archive/2026/11/2026-11-15.json",
+      "revision": "2026-11-15T07:05:58+08:00",
+      "articles": [
+        {
+          "id": "https://updates.shivam.consulting/2026/11/12/how-to-design-ai-agent-memory-and-selective-forgetting",
+          "title": "Agent 记忆不是“存更多”，而是设计写入、召回与遗忘三套决策",
+          "originalTitle": "How to Design AI Agent Memory and Selective Forgetting",
+          "url": "https://updates.shivam.consulting/2026/11/12/how-to-design-ai-agent-memory-and-selective-forgetting/",
+          "topic": "Agent 记忆治理、长期上下文、隐私与可靠性",
+          "source": "Shivam.Consulting Blog",
+          "author": "Shivam Tiwari",
+          "publishedAt": "2026-11-12",
+          "readingMinutes": 11,
+          "summary": "文章把 Agent 记忆重新定义为写入、召回和遗忘三套连续决策，而非向量库或上下文窗口问题。它提出，任何长期记忆在写入前都应明确所有者、未来召回条件和遗忘条件，并区分不参与召回、到期、被新事实取代、删除和模型遗忘五种不同操作。每条记忆除内容外还应携带类型、作用域、来源、状态、有效期、权限、关系、召回理由和删除地图；召回时先做作用域与资格过滤，再排序、消解冲突并只注入最小必要上下文。文章还给出延迟依赖、噪声饱和、纠错取代、临时例外、失败工具状态、删除复活、边界隔离和模型遗忘等测试场景。",
+          "keyPoints": [
+            "没有明确所有者、召回条件和遗忘条件的信息不应进入长期记忆。",
+            "遗忘至少分为排除召回、到期、被取代、删除和模型遗忘五种操作。",
+            "召回应先执行权限、状态与时效过滤，相似度只能参与后续排序。",
+            "写入与召回应设置独立熔断器，并按决策后果设置不同发布门槛。"
+          ],
+          "whyRead": "它把模糊的“记忆体验”拆成可写入 PRD、数据模型、权限策略和测试计划的能力，尤其适合跨会话 Agent、个人助理和企业知识助手团队。最重要的提醒是：没有遗忘条件的长期记忆，本质上是尚未偿还的数据债务。"
+        },
+        {
+          "id": "https://research.google/blog/agile-deliberation-how-ai-helps-humans-define-the-gray-areas",
+          "title": "当用户自己也没想清楚规则时，AI 应成为“审议伙伴”",
+          "originalTitle": "Agile Deliberation: How AI helps humans define the gray areas",
+          "url": "https://research.google/blog/agile-deliberation-how-ai-helps-humans-define-the-gray-areas/",
+          "topic": "人机协作、AI 应用设计、主观分类与规则发现",
+          "source": "Google Research",
+          "author": "Otilia Stretcu、Leijie Wang",
+          "publishedAt": "2026-11-04",
+          "readingMinutes": null,
+          "summary": "Agile Deliberation 针对“健康食物”“鼓舞人心的艺术”或误导性付费诱导等没有统一边界的概念，把 AI 从规则执行器变成帮助用户形成规则的审议伙伴。系统先将概念拆成正向子类和明确排除项，再主动寻找语义边界样本，让用户通过具体案例发现隐藏假设，反馈随后进入自动 prompt 优化循环。研究用 18 场、每场 1.5 小时的真人实验比较 zero-shot、自动概念拆解和手工审议方案；论文报告 F1 相比自动分解基线提高 7.5%，相比手工审议提高 3% 以上，参与者还报告更低的努力、压力和心理负担。",
+          "keyPoints": [
+            "主观任务的难点往往不是模型不知道规则，而是用户尚未形成完整规则。",
+            "先拆分正向范围与排除项，再用边界案例驱动概念迭代。",
+            "样本选择应暴露人的定义不确定性，而不只降低模型不确定性。",
+            "评估除准确率外还应覆盖一致性、盲点发现、认知负担和规则修订成本。"
+          ],
+          "whyRead": "它提供了一种可迁移到内容审核、推荐偏好、品牌调性和风险阈值的交互范式：不要强迫用户一次写清 prompt，而要用经过挑选的边界案例帮助用户形成意图。"
+        },
+        {
+          "id": "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature",
+          "title": "多 Agent 的关键不是“多”，而是上下文隔离、对抗性验证和可替换工作流",
+          "originalTitle": "Advancing science & engineering with Antigravity’s /teamwork",
+          "url": "https://www.research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/",
+          "topic": "多 Agent 编排、模型能力落地、独立验证与复杂任务工程",
+          "source": "Google Research",
+          "author": "Vahab Mirrokni",
+          "publishedAt": "2026-11-13",
+          "readingMinutes": null,
+          "summary": "文章展示 Antigravity /teamwork 在数学、化学、机器学习和系统工程中的多 Agent 工作方式：多个 Agent 并行探索，同时由专职反证者和 Lean 4、未改写测试、模拟器、硬件计数器及检索系统独立验证。系统按任务给 Agent 最小文件与工具权限，在上下文过长时干净交接，并让批评者用独立上下文审计，以降低共享错误前提造成的共识幻觉。案例包括约 180 万行 Lean、28,800 次子 Agent 调用的 LEAP 形式化项目，以及 578 篇投稿参与的 Deep Review；后者 70 份调查中约 90% 认为反馈大多符合事实并愿再次使用，超过 30% 发现实质问题或排版错误，14% 发现需一小时以上修复的缺口。",
+          "keyPoints": [
+            "多 Agent 的可靠性来自探索与证伪的组织方式，而不是 Agent 数量本身。",
+            "上下文隔离、干净交接和独立批评可减少共享错误前提。",
+            "先设计测试、模拟和形式化验证面，再决定是否增加 Agent。",
+            "协作模板需要可观测、可替换，并有预算、时间与验证覆盖率停止条件。"
+          ],
+          "whyRead": "它为复杂 Agent 工作流提供了比“主管加子 Agent”更成熟的设计词汇，并用案例说明外部验证器的重要性；同时也提醒读者审慎看待供应方披露不足的成本、失败率和选择偏差。"
+        }
+      ]
+    },
     {
       "date": "2026-11-14",
       "intro": "本期从体验层、组织层和经营层审视 Agent 产品：如何用解释、证据、控制与恢复建立信任；如何在 AI 加速工程后重组发现与交付；以及如何用有边界的工作流证据替代模型名望驱动的决策。",
