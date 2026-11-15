@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-15T07:05:58+08:00",
+  "updatedAt": "2026-11-16T07:08:28+08:00",
   "days": [
+    {
+      "date": "2026-11-16",
+      "intro": "本期从 AI 原生产品研发组织、可信 Eval 方法和模型权重供应链三个层级，讨论如何让 Agent 的上下文、判断、证据、权限与责任成为可检查、可规模化的系统。",
+      "path": "archive/2026/11/2026-11-16.json",
+      "revision": "2026-11-16T07:08:28+08:00",
+      "articles": [
+        {
+          "id": "https://atlassian.com/blog/how-we-build/3-lessons-from-rebuilding-atlassians-product-development-lifecycle-for-people-and-agents",
+          "title": "AI 加速实现以后，产品研发真正的瓶颈转向上下文与判断",
+          "originalTitle": "3 lessons from rebuilding Atlassian’s product development lifecycle for people and agents",
+          "url": "https://www.atlassian.com/blog/how-we-build/3-lessons-from-rebuilding-atlassians-product-development-lifecycle-for-people-and-agents",
+          "topic": "AI 原生产品研发、组织分工、共享上下文与质量责任",
+          "source": "Inside Atlassian",
+          "author": "Avani Prabhakar",
+          "publishedAt": "2026-11-10",
+          "readingMinutes": null,
+          "summary": "Atlassian 认为 AI 让个人更快并不自动让团队更快，产品研发的瓶颈正转向问题选择、上下文传递和质量判断。公司在近一万名研发人员的组织中总结三条原则：把人的注意力放到会改变结果的决策点；让上下文随工作流动并持续复利；扩大贡献范围但保留专业质量责任。案例包括 Agent 为 52% 的安全漏洞准备修复方案、每周约节省 50 个工程日；以共享规格连接产品、设计和工程的 Confluence 试点，用 2 和 4 个开发者周完成历史估算为 30 和 40 周的功能；以及 50 多名产品经理和设计师三个月上线 100 多项经工程师批准的改动。",
+          "keyPoints": [
+            "AI 生成加速后，交接、上下文、审查与问题选择成为新的端到端瓶颈。",
+            "人的注意力应集中在风险接受、例外判断、规格确认和最终质量等高杠杆节点。",
+            "共享规格要同时服务人的审查与 Agent 的执行，并允许持续更新与回写。",
+            "扩大建设者范围不能取消专业责任，组织变化应按任务、技能、角色的顺序推进。"
+          ],
+          "whyRead": "它把 AI 平台价值从提供模型入口推进到重构跨角色工作流，对 MaaS 和跨端 Agent 平台很有参考价值。团队可以用其方法先寻找上下文断点和判断节点，再决定哪些任务交给 Agent，并用全周期、返工和真实采用衡量效果。"
+        },
+        {
+          "id": "https://anthropic.com/research/building-strong-safety-evaluations",
+          "title": "Eval 的首要任务不是给出分数，而是说明这个分数能支持什么决定",
+          "originalTitle": "Building strong safety evaluations",
+          "url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+          "topic": "AI Eval、测量有效性、grader 校验与上线决策",
+          "source": "Anthropic Engineering",
+          "author": "Ruth Appel、Evan Frondorf、Jeremy Hadfield、Rebecca Hiscott、Kamya Jagadish、Shayne Longpre、Madeleine Tucker、Brett Wittmershaus",
+          "publishedAt": "2026-11-13",
+          "readingMinutes": null,
+          "summary": "Anthropic 借鉴心理学复现改革，将安全 Eval 拆成安全运行、设计、执行和报告四个环节。文章强调先定义真正要测的构念：拒答率并不总等于安全，双重用途和用户危机场景需要领域专用的适当响应 Rubric，并同时测危险请求的错误服从与正常请求的过度拒绝。Eval 应覆盖多轮、语言、模态、产品表面、system prompt 和工具权限；grader 需检查长度、位置和自我偏好，并以盲标的人类样本验证。团队还应在看结果前预注册指标、切片和改进阈值，重复运行并报告置信区间；Anthropic 将 100 个复杂多轮样本和 1,000 个简单单轮样本视为经验起点。",
+          "keyPoints": [
+            "先明确评测支持的产品决策及行为构念，观察性结果不能自动支持因果结论。",
+            "多轮场景更能暴露意图渐变、上下文累积和单轮测试已饱和的问题。",
+            "grader 必须与人类专家一致度、Rubric 敏感性及长度和位置偏差一起验证。",
+            "预注册、重复运行、切片和置信区间能防止团队把抽样噪声解释成真实进步。"
+          ],
+          "whyRead": "它几乎可以直接转化为跨端记忆、远程车控、主动触发和多模态助手的 Eval 评审清单。最重要的三条原则是：收集数据前写清要测什么，信任分数前先验证 grader，解释结果时必须呈现不确定性。"
+        },
+        {
+          "id": "https://microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents",
+          "title": "Agent 的模型权重也属于供应链：正常通过 Eval，不代表没有隐藏触发器",
+          "originalTitle": "Lazare, veni foras: Reprogramming Dormant Neurons to Backdoor AI Agents",
+          "url": "https://www.microsoft.com/en-us/research/blog/lazare-veni-foras-reprogramming-dormant-neurons-to-backdoor-ai-agents/",
+          "topic": "Agent 安全、模型权重供应链、最小权限与纵深防御",
+          "source": "Microsoft Research",
+          "author": "Dimitris Papailiopoulos",
+          "publishedAt": "2026-11-10",
+          "readingMinutes": null,
+          "summary": "Microsoft Research 展示 Lazarus 权重级后门：无需重新训练，只需改写不到 10 个休眠神经元，就能让正常通过标准 Eval 的 Agent 在日期等触发条件出现时注入攻击命令。约 50 个例子即可拟合触发检测，一个神经元可强制注入一个 token，串联后形成可执行载荷；攻击只需推理级算力。这不是开放权重专属问题，任何能写入 checkpoint 的账户、流水线、存储或内部人员都可能造成风险。防御需要模型来源、权重哈希与签名、相对基础模型的差异扫描、红队测试、运行时最小权限、重大操作复核和真实副作用监控组成纵深体系。",
+          "keyPoints": [
+            "模型权重应像代码和二进制依赖一样进入软件物料清单、签名和审批流程。",
+            "能力与安全 Eval 无法证明权重未被篡改，来源和完整性校验解决的是不同问题。",
+            "后门损害取决于 Agent 获得的工具与身份权限，因此最小权限和外置政策仍是核心防线。",
+            "任何权重扫描都只是证据而非安全保证，需要来源、签名、运行监控和人工复核共同防御。"
+          ],
+          "whyRead": "它把 Agent 安全从 Prompt 注入和工具越权向下推进到模型文件本身。对 MaaS 平台，这意味着模型路由、成本与 Eval 之外，还需要来源证明、版本锁定、权重完整性、最小权限、运行时审计和快速撤销。"
+        }
+      ]
+    },
     {
       "date": "2026-11-15",
       "intro": "今天的三篇文章分别聚焦 Agent 记忆治理、主观规则的人机共同澄清，以及多 Agent 协作中的独立验证。共同主题是：AI 产品的下一阶段差异不只来自模型更强，而来自记忆、判断与验证能否被做成可治理系统。",
