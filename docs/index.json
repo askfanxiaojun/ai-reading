@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-16T07:08:28+08:00",
+  "updatedAt": "2026-11-17T06:56:24+08:00",
   "days": [
+    {
+      "date": "2026-11-17",
+      "intro": "本期从 Agent 交互设计、AI 加速研发下的持续用户研究和企业领域语言治理三个层面，讨论如何把委托边界、产品证据与上下文资产做成可持续的产品机制。",
+      "path": "archive/2026/11/2026-11-17.json",
+      "revision": "2026-11-17T06:56:24+08:00",
+      "articles": [
+        {
+          "id": "https://uxmatters.com/mt/archives/2026/11/beyond-chat-six-principles-for-the-next-generation-of-ai-ux.php",
+          "title": "Agent UX 不应等同于聊天框：真正要设计的是委托关系",
+          "originalTitle": "Beyond Chat: Six Principles for the Next Generation of AI UX",
+          "url": "https://www.uxmatters.com/mt/archives/2026/11/beyond-chat-six-principles-for-the-next-generation-of-ai-ux.php",
+          "topic": "Agent UX、多模态交互、自治等级、透明度与恢复设计",
+          "source": "UXmatters",
+          "author": "Ken Olewiler",
+          "publishedAt": "2026-11-16",
+          "readingMinutes": null,
+          "summary": "文章认为 Agent 产品的设计对象已从页面和点击路径转向人与系统如何共享工作、责任与控制。它提出六条原则：超越聊天框、锚定熟悉结构、校准复杂度、建立玻璃盒、匹配自治等级、集成逃生口，并组成三组张力。聊天适合表达意图，比较、审查和状态管理仍需要结构化界面；透明度应通过角色化摘要和渐进展开提供；自治应随任务风险、可逆性、环境与偏好调整；暂停、纠正、撤销和接管要进入正常工作流并保留已完成成果。车载 Agent、企业多 Agent 平台和承保系统案例进一步说明多模态分工、分层可见性和证据链的具体做法。",
+          "keyPoints": [
+            "聊天只是表达意图的一种入口，复杂比较、审查和状态管理更适合结构化界面。",
+            "透明度不是展示全部推理，而是让用户按角色查看可核验证据、假设、动作和历史。",
+            "自治应是一条随风险、可逆性、场景与用户偏好变化的连续谱。",
+            "暂停、纠正、撤销和人工接管应是主流程能力，并尽量保留 Agent 已完成的有效工作。"
+          ],
+          "whyRead": "它能直接转成车端、手机端、眼镜和多 Agent 工作台的 UX 评审清单，帮助团队决定每个场景采用何种模态、展示多少状态、哪些动作可自动执行，以及用户怎样无损接管。"
+        },
+        {
+          "id": "https://nngroup.com/articles/research-in-the-loop",
+          "title": "发布速度超过研究速度后，把研究要求写进产品规格",
+          "originalTitle": "Research-In-The-Loop: How UXR Adapts to Development at AI Speed",
+          "url": "https://www.nngroup.com/articles/research-in-the-loop/",
+          "topic": "用户研究、AI 原生研发流程、产品度量与持续发现",
+          "source": "Nielsen Norman Group",
+          "author": "Tony Alicea",
+          "publishedAt": "2026-11-13",
+          "readingMinutes": 9,
+          "summary": "文章提出 research-in-the-loop：研究人员在开发前定义发布必须捕获的证据，coding Agent 在实现功能时同时交付埋点、反馈入口和观察工具，发布后研究团队解释结果并写回下一轮规格。研究被区分为验证预期的 Evaluation、解释异常的 Investigation 和寻找未知需求的 Discovery，仪表盘和埋点只能覆盖前两类的一部分，不能替代开放式发现。帮助台案例把假设、成功信号、伤害信号、事件和访谈触发器写入同一份规格，同时提醒团队用对照组、样本量和观察周期处理因果问题，并保留定性研究与独立探索。",
+          "keyPoints": [
+            "每次发布都应在规格中写清假设、用户与业务结果、伤害指标、事件和定性触发条件。",
+            "Agent 应把研究仪器与功能一起交付，使可观察性成为验收内容而非后续补作。",
+            "行为数据用于定位异常，定性研究用于解释原因和发现系统未记录的需求。",
+            "发布数据不自动证明因果，关键决策仍需对照、样本、观察周期和证据有效性设计。"
+          ],
+          "whyRead": "它为 AI 产品团队解决“实现速度远快于证据积累”提供了可立即试点的方法，尤其适合主动式 AI、车控、跨端记忆和售后服务：把成功、伤害、失败场景和访谈触发器直接写进 PRD。"
+        },
+        {
+          "id": "https://martinfowler.com/bliki/GeneratedGlossary.html",
+          "title": "企业 Agent 的上下文工程，可以从一份分域词表开始",
+          "originalTitle": "Generated Glossary",
+          "url": "https://martinfowler.com/bliki/GeneratedGlossary.html",
+          "topic": "企业上下文工程、领域语言、知识治理与 Agent Harness",
+          "source": "MartinFowler.com",
+          "author": "Martin Fowler",
+          "publishedAt": "2026-11-12",
+          "readingMinutes": null,
+          "summary": "文章建议用 LLM 从企业文档、邮件、聊天、转写和代码中发现专业术语及特殊含义，生成由领域专家审核的词表，供其他 Agent 按需检索。核心不是建立覆盖全公司的唯一标准词典，而是尊重 bounded context：同一词在不同部门、产品线和代码域中可以有不同定义，词表应显式保存这些差异。词表需要版本控制、定期刷新、来源和负责人；大词表只在初始上下文提供术语目录与链接，按需加载完整定义。它还可记录禁用词、替代词和弃用时间，并被 Harness 用来检查代码、文档与用户界面的语言。",
+          "keyPoints": [
+            "领域词表能补足通用模型不了解企业专用术语和特殊含义的问题。",
+            "不要强求全公司唯一词典，应按 bounded context 保存定义差异与适用范围。",
+            "词表要有专家审核、来源、版本、负责人、刷新机制和按需检索能力。",
+            "词表既能提供上下文，也能约束生成、检查内部黑话和构造术语歧义 Eval。"
+          ],
+          "whyRead": "它为 MaaS 和跨端 Agent 平台提供了低成本的 Context Layer 起点：把车控、座舱、售后和研发术语变成可审阅、可分域、可版本化的资产，并连接 PRD、接口、文案和 Eval。"
+        }
+      ]
+    },
     {
       "date": "2026-11-16",
       "intro": "本期从 AI 原生产品研发组织、可信 Eval 方法和模型权重供应链三个层级，讨论如何让 Agent 的上下文、判断、证据、权限与责任成为可检查、可规模化的系统。",
