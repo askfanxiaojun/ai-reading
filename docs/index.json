@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-17T06:56:24+08:00",
+  "updatedAt": "2026-11-17T07:10:00+08:00",
   "days": [
     {
       "date": "2026-11-17",
       "intro": "本期从 Agent 交互设计、AI 加速研发下的持续用户研究和企业领域语言治理三个层面，讨论如何把委托边界、产品证据与上下文资产做成可持续的产品机制。",
       "path": "archive/2026/11/2026-11-17.json",
-      "revision": "2026-11-17T06:56:24+08:00",
+      "revision": "2026-11-17T07:10:00+08:00",
       "articles": [
         {
           "id": "https://uxmatters.com/mt/archives/2026/11/beyond-chat-six-principles-for-the-next-generation-of-ai-ux.php",
