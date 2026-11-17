@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-17T07:10:00+08:00",
+  "updatedAt": "2026-11-18T07:10:00+08:00",
   "days": [
+    {
+      "date": "2026-11-18",
+      "intro": "本期从 Agent 集成形态、上线治理和实体硬件三个层面，讨论如何选择耐久能力、用数字定义可放量边界，并理解模型跨越软件进入真实工程后的产品机会与验证责任。",
+      "path": "archive/2026/11/2026-11-18.json",
+      "revision": "2026-11-18T07:10:00+08:00",
+      "articles": [
+        {
+          "id": "https://www.agentexperiences.com/blog/mcp-server-skill-plugin-or-app",
+          "title": "MCP Server、Skill、Plugin 还是 App：你的产品真正需要什么",
+          "originalTitle": "MCP Server, Skill, Plugin, or App: What Your Product Actually Needs",
+          "url": "https://www.agentexperiences.com/blog/mcp-server-skill-plugin-or-app",
+          "topic": "Agent 集成、MCP、Skill 与产品平台战略",
+          "source": "Agent Experiences",
+          "author": "Alan Weibel",
+          "publishedAt": "2026-11-17",
+          "readingMinutes": 11,
+          "summary": "文章把混乱的 Agent 生态名词还原为两类：服务器上的能力与数据，以及进入 Agent 上下文的说明与工作流。对大多数需要执行动作的产品，默认路线是先把现有 API 暴露为远程 MCP Server，再用 Skill 定义工具顺序、权限边界、异常恢复和完成标准；内容站点先做好可读网站与结构化数据，目录型产品先做 Product Feed，只有结果需要比较、审查或继续交互时才增加可视化 App。它强调先投资 API、网站和业务数据等耐久层，再选择目标用户真实聚集的平台分发，不能把上架误当采用。文章同时给出 MCP 下载、Connector 数量、旧形态退役及 Feed 效果等行业信号，但这些快速变化的数据仍需团队自行复核。",
+          "keyPoints": [
+            "把 Agent 集成拆成数据、动作、工作流和界面四个可验收对象，而不是笼统写成接入生态。",
+            "内容型网站先做好可读页面与结构化数据，商品目录先做 Feed，需要动作时再做远程 MCP Server 与 Skill。",
+            "Skill 是连接产品策略、工具顺序、权限边界、错误恢复和 Eval 的行为规范，不是提示词附件。",
+            "API、业务数据与网站通常比平台包装格式更耐久；平台上架必须用发现、授权、调用、任务完成和留存漏斗验证。"
+          ],
+          "whyRead": "它为 AI 产品经理提供了一棵可直接用于路线图评审的决策树，能避免为每个平台重复建设薄而脆的外壳，也能提醒团队先补齐 API、权限、数据质量和工作流等基础能力。对车、手机、眼镜等多端产品尤其有启发：真正应复用的是能力、状态和委托规则，而不是同一种聊天界面。"
+        },
+        {
+          "id": "https://www.theagenticcpo.ai/essays/ready-is-a-number/",
+          "title": "“准备好”应该是一个数字",
+          "originalTitle": "Ready is a number",
+          "url": "https://www.theagenticcpo.ai/essays/ready-is-a-number/",
+          "topic": "Agent 上线治理、Eval、灰度发布与可逆性",
+          "source": "The Agentic CPO",
+          "author": "Jason Palmer",
+          "publishedAt": "2026-11-16",
+          "readingMinutes": 7,
+          "summary": "文章主张把 Agent 发布从一个日期改造成一组分阶段、可度量、可撤销的决策。每个关键问题都应有一个负责人和一个主数字：must-pass Eval 是否零失败，人类复核一项结果需要多久，单客户与全量关闭需要几分钟，全量单任务成本是多少，输入、输出、版本、工具调用和人工修改能否重建，支持与升级路径是否就绪，以及至少三位共同创作者是否在真实工作中验证过。虚构的 Larkhaven 兽医记录案例用 40 次检查、不受支持陈述从 9 降到 0、复核略低于 2 分钟、3 家共同创作者诊所、60 家条件式 Beta、关闭耗时 2/4 分钟和成本 0.11 美元高于 0.08 美元目标，说明证据如何决定范围与放量，而不是让日历压过风险。",
+          "keyPoints": [
+            "每个发布问题需要一个负责人、一个数字和一个会被该数字触发的继续、暂停、降级或回退动作。",
+            "关键场景应设为 must-pass 硬门槛，平均得分不能抵消高风险失败。",
+            "关闭开关必须被实际演练，并在回退时保留草稿、说明已执行动作和支持人工接管。",
+            "上线前就要计算全量推理、工具、存储、复核、支持和异常重试成本，并定义前 30 天的观察与回退规则。"
+          ],
+          "whyRead": "它把 Agent 团队最常见的灰色地带——Demo 已经能跑但没人能说清是否可放量——变成可审计的产品机制。对车控、交易、医疗记录和企业审批尤其适用；团队可以直接把风险说明改造成负责人、阈值、当前值、证据、失败动作和复核时间构成的 Gate 表。"
+        },
+        {
+          "id": "https://www.anthropic.com/research/claude-electronics-design",
+          "title": "在真实电子设计中测试 Claude",
+          "originalTitle": "Testing Claude on real-world electronics design",
+          "url": "https://www.anthropic.com/research/claude-electronics-design",
+          "topic": "模型能力落地、工程 Agent 与实体硬件",
+          "source": "Anthropic",
+          "author": "Anthropic Science 团队（与 Diode Computers 合作）",
+          "publishedAt": "2026-11-09",
+          "readingMinutes": null,
+          "summary": "Anthropic 与 Diode Computers 让 Claude Fable 5.2 从简短需求出发，完成扬声器电话、家庭语音助手中枢和手持虚拟宠物的规格、原理图、PCB 布局布线、3D 外壳、固件和物料清单；Diode 物理组装后，三台原型在不修改电路的情况下工作。研究最值得关注的是跨域约束维护、主动推翻不可行布局、自写路由算法及把制造和供应检查纳入闭环：模型发现板子需以约 25 度装入，调整麦克风声道共振，修复六处过窄阻焊层，并判断有意接地告警可忽略。Fable 5.2 在 PCB Gym 得分 69%，上一代为 25%，在 BenchCAD 2.1 得分 83.5%。但三台设备仍未经过电气验证、天线调谐、热测试、认证或量产设计，实物构建与测试仍依赖工程师。",
+          "keyPoints": [
+            "模型开始贯通规格、电子、机械、固件、供应和制造，而不是只生成单个工程文件。",
+            "长任务能力的关键包括维护下游约束、发现死路、回滚局部状态并重建计划。",
+            "工程 Agent 的产品基础是可机器读取的约束、工具接口、仿真环境、制造数据和实测反馈。",
+            "原型工作不等于商业硬件交付；电气、射频、热、认证、量产与长期耐久验证仍是明确边界。"
+          ],
+          "whyRead": "它用三个真实制造的原型说明模型能力如何从单点辅助走向跨工具工程执行，也清楚保留了量产前的验证鸿沟。对汽车、机器人、眼镜和 IoT 团队的启发是：竞争优势可能不在单一模型，而在能否把工程知识、数字线程、工具、供应数据、实测反馈和发布门槛组成高质量的 Agent 环境。"
+        }
+      ]
+    },
     {
       "date": "2026-11-17",
       "intro": "本期从 Agent 交互设计、AI 加速研发下的持续用户研究和企业领域语言治理三个层面，讨论如何把委托边界、产品证据与上下文资产做成可持续的产品机制。",
