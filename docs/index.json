@@ -1,8 +1,73 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-18T07:10:00+08:00",
+  "updatedAt": "2026-11-19T06:58:00+08:00",
   "days": [
+    {
+      "date": "2026-11-19",
+      "intro": "本期从 Agent 动作的可逆性、平台的 Agent Experience Eval 和 AI 推荐的跨渠道商业归因三个层面，讨论如何让 Agent 被安全委托、可靠执行，并创造可证明的真实结果。",
+      "path": "archive/2026/11/2026-11-19.json",
+      "revision": "2026-11-19T06:58:00+08:00",
+      "articles": [
+        {
+          "id": "https://arxiv.org/abs/2611.22075",
+          "title": "可以撤销吗？为 AI Agent 动作建立可逆性分级",
+          "originalTitle": "Can You Undo It? Reversibility Classes for AI Agent Actions",
+          "url": "https://arxiv.org/abs/2611.22075",
+          "topic": "Agent 安全、动作权限、可逆性与恢复设计",
+          "source": "arXiv",
+          "author": "Deepak Waghmare、Shaad Sufi",
+          "publishedAt": "2026-11-17",
+          "readingMinutes": null,
+          "summary": "论文指出，工具权限只能说明 Agent 可以执行动作，不能说明错误发生后能够恢复。作者提出 R0–R4 五级可逆性词汇，用具体参数、执行上下文、前置状态捕获和恢复机制共同分类，并把可逆性与授权、严重度和模型置信度分开。证据注册表覆盖 20 个 MCP Server、536 个工具和 738 条规则案例；481 个可比较工具中有 118 个原生注释与注册表草案不一致。在 2,158 条历史运行轨迹回放中，Session Guard 对 29 条可明确归因的攻击阳性动作全部触发 Gate，read/write 代理只覆盖 18 条，同时在 1,209 条良性运行中仅多增加 9 个审批点。文件、Git、SQLite 和浏览器实验说明，恢复取决于是否捕获旧状态、后续写入、编辑器存储和恢复路径，而不是简单的“有没有反向命令”。",
+          "keyPoints": [
+            "有权调用工具不等于做错后可恢复；分类必须结合动作参数、上下文和真实恢复条件。",
+            "可逆性应与授权、后果严重度、不确定性和撤销窗口共同决定自动执行或确认策略。",
+            "工具契约应声明状态捕获、恢复命令、有效期、并发覆盖风险和无法收回的外部影响。",
+            "恢复 Eval 要实际覆盖失败、撤销、并发修改和恢复后校验，不能只验证任务成功。"
+          ],
+          "whyRead": "它给 Agent 产品提供了比 read/write 权限更精细的治理语言，可以直接用于车控、支付、消息、文件和智能家居的工具 Schema、确认策略与恢复测试。尤其能避免把“存在反向操作”误认为动作没有不可收回的现实后果。"
+        },
+        {
+          "id": "https://www.together.ai/blog/how-we-do-agent-evals-at-together-ai",
+          "title": "Together AI 如何做 Agent Eval",
+          "originalTitle": "How we do agent evals at Together AI",
+          "url": "https://www.together.ai/blog/how-we-do-agent-evals-at-together-ai",
+          "topic": "Agent Experience、平台产品、Skill 与 Eval",
+          "source": "Together AI",
+          "author": "Hassan El Mghari、Sam Barrowclough、Zain Hasan、Mo King",
+          "publishedAt": "2026-11-16",
+          "readingMinutes": null,
+          "summary": "Together AI 用真实开发任务评估 Agent 是否能使用平台，而不是只测模型能力。任务分别在 Baseline、文档 MCP 和 Skill 三种配置下，以三种模型、两次尝试运行，并在隔离 Sandbox 中记录完整工具与 API 轨迹。GPU 集群案例中，示例输出未标为静态、Skill 链接到营销页而非价格表，使较弱模型把样例当实时库存；增加两句明确的实时接口与价格来源后，各模型通过率达到 100%。另一次把 14 个 Skill 合并为统一 Skill 后，通过率反而从 90.3% 降到 75%，成本超过两倍；通过缩短路由、按需加载、更新失效模型和持续测试示例代码，最终达到 70/72、即 97.2%，耗时下降 20%，成本回到原水平。案例说明文档、CLI help、API 错误和 Skill 都是 Agent 的运行时产品界面。",
+          "keyPoints": [
+            "用真实任务和明确验收条件评估 Agent，并同时比较 Baseline、MCP、Skill 和不同能力档位模型。",
+            "不仅审查失败，也审查通过但绕路的轨迹；工具调用、重试、Token、时延和成本都是 AX 指标。",
+            "强模型可能绕过错误文档和 API 缺陷，因此只测最强模型会掩盖产品可访问性问题。",
+            "文档、错误信息、示例代码和 Skill 应像代码一样版本化、回归测试并持续监测失效。"
+          ],
+          "whyRead": "这篇提供了一个可以直接迁移到 MaaS、车控平台和第三方 Agent 工具生态的 Eval 闭环：真实任务、隔离运行、完整轨迹、失败归因、最小修复和回归验证。其价值不在供应商公布的 97.2%，而在如何用 Eval 发现并修复平台产品本身。"
+        },
+        {
+          "id": "https://arxiv.org/abs/2611.20378",
+          "title": "直达商品：AI 推荐影响了购物，但零售商往往看不见",
+          "originalTitle": "Straight to the Product: What Online Retailers Miss When Shoppers Ask AI First",
+          "url": "https://arxiv.org/abs/2611.20378",
+          "topic": "AI 商业化、购物 Agent、用户行为与效果归因",
+          "source": "arXiv",
+          "author": "Michael Iannelli、Alan Ai",
+          "publishedAt": "2026-11-16",
+          "readingMinutes": null,
+          "summary": "研究把同一用户在 ChatGPT、Gemini、Claude、Perplexity 和 Grok 中获得的购物回答，与随后在 20 家大型零售商的网页访问连接起来。已发生相关商品页访问的天里，44% 查看了自己回答中的商品，换成匹配他人的回答只有 1.5%；以全部具体商品回答为分母，24 小时内访问被推荐商品从历史基线每百条 0.02 次升至 2.07 次。89% 的后续访问没有 AI referral 痕迹，54% 由普通网页搜索带来；访问前搜索直接包含商品名的比例为 28%，历史周仅 1%。作者提出 product follow-through：具体商品回答后 24 小时内同一用户访问该商品页的比例，并用同一用户 14、21、28 天前行为作比较。到店后用户仍继续比较，31.4% 的访问查看至少两件商品，普通访问为 26.2%。",
+          "keyPoints": [
+            "购物 Agent 的真实影响经常被普通搜索和直接访问吞掉，链接 CTR 与 last-click 会系统性低估价值。",
+            "必须区分不同分母：44% 是已经访问商品页的天，全部回答口径的 follow-through 是 2.07%。",
+            "Product follow-through 把回答与后续商品页行为连接，可跨越 referral、搜索和直接访问。",
+            "AI 决定旅程起点后，用户仍会继续比较，零售商的商品页、推荐和站内搜索依然重要。"
+          ],
+          "whyRead": "它示范了如何把“回答是否相关”升级为“用户后来做了什么”，对购物 Agent、汽车选配、门店服务、旅行和本地生活都适用。产品团队可以借鉴用户级基线、对象匹配和时间窗口，建立跨渠道增量指标，避免让最后一次点击决定 Agent 的价值。"
+        }
+      ]
+    },
     {
       "date": "2026-11-18",
       "intro": "本期从 Agent 集成形态、上线治理和实体硬件三个层面，讨论如何选择耐久能力、用数字定义可放量边界，并理解模型跨越软件进入真实工程后的产品机会与验证责任。",
