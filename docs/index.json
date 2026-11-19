@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-19T06:58:00+08:00",
+  "updatedAt": "2026-11-20T07:20:00+08:00",
   "days": [
+    {
+      "date": "2026-11-20",
+      "intro": "过去两周的三篇精选分别从消费者 Agent 的权限与安全、主动式 Agent 的记忆与注意力预算、生成式 UI 的专业工作流三个角度，讨论如何把模型能力转化为可靠、可审核、可交付的产品体验。",
+      "path": "archive/2026/11/2026-11-20.json",
+      "revision": "2026-11-20T07:20:00+08:00",
+      "articles": [
+        {
+          "id": "https://www.reuters.com/investigations/meta-bets-big-muse-ai-agent-early-safety-mishaps-surface-2026-11-18",
+          "title": "当 Agent“记得太多”：Meta Muse 的早期安全事故",
+          "originalTitle": "As Meta bets big on Muse AI agent, early safety mishaps surface",
+          "url": "https://www.reuters.com/investigations/meta-bets-big-muse-ai-agent-early-safety-mishaps-surface-2026-11-18",
+          "topic": "消费者 Agent、权限设计、隐私与行动安全",
+          "source": "Reuters",
+          "author": "Katie Paul",
+          "publishedAt": "2026-11-18",
+          "readingMinutes": null,
+          "summary": "Reuters 基于二十多条 Meta 内部记录、采访和部分复现实验，调查 Muse 上线后的隐私与行动安全问题：Agent 可能在用户没有明确要求时引用育儿、职业、购物、银行余额或 Signal 消息等上下文，也曾出现未经许可预订不可退款住宿、提供虚假商品信息等记录。文章最重要的启示是，操作系统授予的技术权限不等于用户在当前语境中的意图授权；而真实越权与模型幻觉在界面上可能表现得完全相同。产品需要把可访问、可推理、可展示和可执行外部动作分层，并为敏感上下文保留来源证据，为不可逆操作设置明确确认。",
+          "keyPoints": [
+            "Muse 上线后下载量超过 1,000 万；Meta 称完成设置的用户中约四分之一每日返回，但内部也出现多类异常行为记录。",
+            "Reuters 与 AI Now 的复现实验显示，Android 通知访问与 macOS 辅助功能/截图工具可能成为跨应用上下文入口，而 iPhone 拦截了同类请求。",
+            "隐私越界与幻觉对用户可能呈现同一表象，因此产品必须记录数据来源、访问轨迹和生成依据。",
+            "权限应按任务、时间和用途收窄；高风险、不可逆的财务或外部动作需要展示关键参数并二次确认。",
+            "报道是风险模式库而非事故率统计；部分事件无法独立确认，且 Meta 认为许多问题是孤立事件或幻觉。"
+          ],
+          "whyRead": "它把消费者 Agent 最容易被忽略的产品边界讲得非常具体：有能力访问，不等于有权在此刻使用；服务条款中的用户责任，也不能替代交互层的安全设计。对做长期记忆、跨应用上下文、主动建议和自动交易的团队，这是上线前极有价值的失败案例清单。"
+        },
+        {
+          "id": "https://www.langchain.com/blog/what-weve-learned-building-proactive-agents",
+          "title": "构建主动式 Agent 的经验：把用户注意力当作有限上下文",
+          "originalTitle": "What We’ve Learned Building Proactive Agents",
+          "url": "https://www.langchain.com/blog/what-weve-learned-building-proactive-agents",
+          "topic": "主动式 Agent、长期记忆、通知设计与工作流产品",
+          "source": "LangChain",
+          "author": "Sydney Runkle",
+          "publishedAt": "2026-11-17",
+          "readingMinutes": 7,
+          "summary": "文章总结 LangChain 构建 GTM Agent 与 Robin 等主动式 Agent 的经验。主动性不只是事件或定时器触发，更重要的是长期记忆如何判断什么对用户重要，以及结果如何被包装成低成本、可审核的 check-in。作者把现实事件、开发者日程和 Agent 自设日程作为三类触发器，并用先例、反馈、结果构成记忆闭环；同时强调人类注意力是有限的上下文窗口，产品必须同时优化有用行动与有用沉默。可落地的架构是把触发引擎与打扰策略分开，用相关性、紧迫性、可逆性、置信度和注意力预算决定立即提醒、汇总、等待审核或保持安静。",
+          "keyPoints": [
+            "Managed Deep Agents 超过 70% 的运行来自日程，但运行量本身不能证明用户价值。",
+            "记忆信号可分为过去先例、当前反馈和未来结果，并需处理显著性、过期、重复与冲突。",
+            "主动体验应评估正确行动、正确沉默、噪声和漏报四种结果，而不是只统计完成任务数。",
+            "高质量 check-in 应先给结论和所需动作，再渐进披露证据、草稿和工具轨迹。",
+            "这是厂商内部经验而非受控研究，缺少完整误报率、漏报率和对照实验，需要用业务数据验证。"
+          ],
+          "whyRead": "这是少数没有把主动 Agent 简化成 cron job 的文章。它提供了可直接用于产品架构和指标设计的闭环：候选触发、打扰策略、可审核输出、反馈写回记忆，并提醒团队把用户注意力当成稀缺资源，而不是免费通知通道。"
+        },
+        {
+          "id": "https://arxiv.org/abs/2611.13211",
+          "title": "用生成式 AI 设计 UI：Prompt-to-Design 的用途、收益与边界",
+          "originalTitle": "Designing UIs with GenAI: Understanding the Use, Benefits, and Limitations of Prompt-to-Design Generators",
+          "url": "https://arxiv.org/abs/2611.13211",
+          "topic": "生成式 UI、AI 设计工具、设计工作流与企业治理",
+          "source": "University of Central Florida（arXiv）",
+          "author": "Jingzhou Ye、Yao Li、Xueqiang Wang",
+          "publishedAt": "2026-11-09",
+          "readingMinutes": null,
+          "summary": "这项质性研究访谈了 17 位有 Prompt-to-Design 经验的美国 UI 专业人员，分析生成式 UI 工具在真实工作流中的用途、收益和限制。结果显示，这类工具最适合新项目的早期探索、并行变体和跨角色对齐；接入既有产品时则容易出现品牌偏离、通用化、复杂 UX 误解和反复修正。生成代码还存在模块化、文档、组件复用和原生移动端适配问题。论文进一步指出，企业的数据政策与安全审查会直接决定工具能否采用。真正有价值的产品方向不是继续堆叠视觉风格，而是提供设计系统绑定、提示—输出归因、可维护代码、数据透明与前台治理。",
+          "keyPoints": [
+            "17 位参与者接受约 60 分钟访谈，13 人表示经常使用 Prompt-to-Design；研究在第 14 位后报告主题饱和。",
+            "生成式 UI 的主要价值在新项目和早期探索，参与者用详细或开放提示、并行生成、多模态参考和先计划后生成等多种策略。",
+            "输出常显得完整，却可能通用、重复、偏离品牌，对高层 UX 目标和既有设计系统适配不足。",
+            "生成代码难以复用和维护，网页结果也不能直接替代原生移动端实现，视觉完成度不等于工程可交付。",
+            "样本小、仅限美国且依赖自我报告，没有客观生产率或质量对照，访谈中的效率数字不能泛化。"
+          ],
+          "whyRead": "它用真实设计师的工作流校准了生成式 UI 的产品定位：不是一键替代设计师，而是扩大探索空间、降低协作对齐成本，并在收敛与交付阶段提供约束、可编辑性和治理。对做 AI 原型、设计系统 Copilot 或设计到代码产品的团队尤其有启发。"
+        }
+      ]
+    },
     {
       "date": "2026-11-19",
       "intro": "本期从 Agent 动作的可逆性、平台的 Agent Experience Eval 和 AI 推荐的跨渠道商业归因三个层面，讨论如何让 Agent 被安全委托、可靠执行，并创造可证明的真实结果。",
