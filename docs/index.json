@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-21T07:20:00+08:00",
+  "updatedAt": "2026-11-21T07:30:00+08:00",
   "days": [
     {
       "date": "2026-11-21",
       "intro": "本期从企业个人 Agent 的身份与生命周期、AI 原型进入生产代码后的设计—工程边界、以及原始用户数据与综合研究结论对 AI 生成设计质量的影响三个方向，讨论模型能力落地所需的责任、上下文与验收系统。",
       "path": "archive/2026/11/2026-11-21.json",
-      "revision": "2026-11-21T07:20:00+08:00",
+      "revision": "2026-11-21T07:30:00+08:00",
       "articles": [
         {
           "id": "https://www.microsoft.com/insidetrack/blog/launching-the-personal-agent-era-how-were-rolling-out-autopilot-at-microsoft",
