@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-20T07:20:00+08:00",
+  "updatedAt": "2026-11-21T07:20:00+08:00",
   "days": [
+    {
+      "date": "2026-11-21",
+      "intro": "本期从企业个人 Agent 的身份与生命周期、AI 原型进入生产代码后的设计—工程边界、以及原始用户数据与综合研究结论对 AI 生成设计质量的影响三个方向，讨论模型能力落地所需的责任、上下文与验收系统。",
+      "path": "archive/2026/11/2026-11-21.json",
+      "revision": "2026-11-21T07:20:00+08:00",
+      "articles": [
+        {
+          "id": "https://www.microsoft.com/insidetrack/blog/launching-the-personal-agent-era-how-were-rolling-out-autopilot-at-microsoft",
+          "title": "企业里的个人 Agent：微软如何推出 Autopilot",
+          "originalTitle": "Launching the personal agent era: How we’re rolling out Autopilot at Microsoft",
+          "url": "https://www.microsoft.com/insidetrack/blog/launching-the-personal-agent-era-how-were-rolling-out-autopilot-at-microsoft",
+          "topic": "企业 Agent、身份权限与生命周期治理",
+          "source": "Microsoft Inside Track",
+          "author": "Alex Fleck",
+          "publishedAt": "2026-11-19",
+          "readingMinutes": null,
+          "summary": "微软内部把 Autopilot 定义为拥有独立身份与生命周期的始终在线个人 Agent：每个实例有 Entra Agent ID、邮箱、OneDrive 和明确发起人，可在发起人离线时承担跨天、跨周的持续任务。文章区分 Agent 模板与运行实例，强调实例从零权限开始，不自动继承发起人的群组和访问权；一对一场景与多人共享空间使用不同上下文边界。独立身份使审计、暂停、封禁、移交和退役成为可操作能力。对产品团队而言，Agent 规模化不只是任务规划问题，还需要把 sponsor、业务目的、资源预算、状态、权限复核和退出条件做成完整生命周期。文章属于微软内部实践与产品教育，缺少试点规模、错误率、事故率和管理员成本等效果数据。",
+          "keyPoints": [
+            "个人 Agent 应拥有独立身份、明确 sponsor、业务目的和可审计的生命周期，而不是仅作为员工账号下的一段自动化。",
+            "模板与运行实例必须分开治理；权限、成本、异常与退役责任都落在具体实例上。",
+            "Agent 从零权限开始，不自动继承人的全部访问权；多人空间只使用共享空间明确提供的上下文与工具。",
+            "独立身份可区分人和 Agent 的动作，并支持只封禁 Agent、在发起人换岗或离职时复核和退役。",
+            "自主范围应通过小规模试点和可靠行为逐步扩大，并始终可观察、暂停和撤回。"
+          ],
+          "whyRead": "它把企业 Agent 从模型与工具调用推进到组织系统：谁拥有它、它能访问什么、为何存在、发生异常如何处置、发起人离职后怎么办。对企业 Copilot、个人 Agent、Agent 管理平台或 MaaS 团队，这是一份具体的非人类成员治理检查表。"
+        },
+        {
+          "id": "https://uxmag.com/articles/from-prototype-to-pull-request",
+          "title": "从原型到 Pull Request：AI 生成代码以后，设计与工程的边界怎么变",
+          "originalTitle": "From Prototype to Pull Request",
+          "url": "https://uxmag.com/articles/from-prototype-to-pull-request",
+          "topic": "生成式 UI、设计系统与生产交付",
+          "source": "UX Magazine",
+          "author": "Jacquelyn Halpern",
+          "publishedAt": "2026-11-18",
+          "readingMinutes": 10,
+          "summary": "文章讨论 Cursor、Claude Code、Figma Make、Codex 等工具如何让设计师直接在代码中探索交互，并使原型可能成为真实 Pull Request 的起点。Salesforce、Stripe、Atlassian、Figma 与 Doctolib 的案例共同说明，产出质量的关键不是一句“使用我们的设计系统”，而是让 Agent 获得真实组件、代码示例、仓库约定、无障碍和动效规则等可执行组织上下文。使用生产组件只是更靠近产品，并不代表生产就绪；空数据、错误、权限、键盘操作、架构、测试、评审与上线后所有权仍需明确。AI 还可能让提案供给超过评审吞吐量，因此指标应从生成数量转向返工、评审往返、缺陷和最终体验。文章属于从业者观察，缺少对照数据，对安全与长期维护成本讨论较少。",
+          "keyPoints": [
+            "代码原型减少设计意图的翻译损耗，也能更早暴露响应式、交互时序和真实约束。",
+            "AI 友好的设计系统需要可访问组件、明确 API、真实代码示例和模式选择规则，而不是抽象口号。",
+            "生产组件不等于生产就绪；异常状态、权限、可访问性、架构、测试和责任归属仍要通过门槛。",
+            "Doctolib 案例显示设计贡献可作为工程可检查的草稿 PR 进入高级工程师评审并上线。",
+            "生成速度可能超过团队评审能力，应衡量避免的返工、评审吞吐、上线缺陷与体验改善。"
+          ],
+          "whyRead": "它把 AI 生成前端的竞争焦点从炫目的首次生成，转向设计系统、代表性数据、PR 评审和生产责任。对生成式 UI、设计系统 Copilot、原型工具和设计到代码平台，这是一次很实用的产品定位校准。"
+        },
+        {
+          "id": "https://www.nngroup.com/articles/raw-data-vs-synthesized-data",
+          "title": "AI 能否直接从原始用户数据生成好设计？",
+          "originalTitle": "Can AI Generate Good Designs from Raw User Data?",
+          "url": "https://www.nngroup.com/articles/raw-data-vs-synthesized-data",
+          "topic": "UX 研究综合、上下文工程与生成式设计评估",
+          "source": "Nielsen Norman Group",
+          "author": "Megan Chan、Rachel Banawa",
+          "publishedAt": "2026-11-20",
+          "readingMinutes": 6,
+          "summary": "NN/g 用航班重订和电商结账两个任务比较原始用户评论与综合研究结论对 AI 生成设计的影响。每项任务约 100 条评论；原始数据组直接获得评论，综合组获得研究者基于同一评论整理的发现与建议，其他提示和设计系统信息相同。每个任务、每种条件生成 8 个设计，共 32 个；人工与 LLM 评委盲评，校准后一致率 96%，最终报告人工得分。综合组平均满足 77.9% 的标准，原始组为 69.5%，提高 8.4 个百分点，p<0.001。航班里程影响与结账商品持续可见等具体问题在综合组处理得更稳定。研究表明更多原文不等于更好的决策上下文，专业综合应作为可版本化、可追溯的产品资产。实验只有两个常见任务、每条件 8 个设计，未做真实用户测试，也未区分研究发现与设计建议各自的贡献。",
+          "keyPoints": [
+            "同一批用户反馈经过研究综合后，生成设计的标准覆盖率由 69.5% 提升至 77.9%，差异为 8.4 个百分点且 p<0.001。",
+            "实验包含两个任务、两种上下文和每条件 8 个设计，共 32 个；采用盲评，人工与 LLM 评分校准后一致率为 96%。",
+            "原始观察不直接告诉模型什么最重要、冲突如何权衡或应该设计什么，模型缺少组织的业务与技术背景。",
+            "面向模型的研究上下文可拆成 Evidence、Finding、Recommendation、Constraint，并保留可追溯关系。",
+            "结果范围有限：只有两个常见任务、小而干净的数据集，评分表不代表整体易用性，也没有真实用户测试。"
+          ],
+          "whyRead": "它用小型但透明的实验证据反驳了“把所有原始数据塞进上下文就够了”。对 RAG、研究助手、客服与销售 Agent、生成式 UI 团队，核心启发是把专业判断做成可维护、可评测、能回溯证据的上下文产品。"
+        }
+      ]
+    },
     {
       "date": "2026-11-20",
       "intro": "过去两周的三篇精选分别从消费者 Agent 的权限与安全、主动式 Agent 的记忆与注意力预算、生成式 UI 的专业工作流三个角度，讨论如何把模型能力转化为可靠、可审核、可交付的产品体验。",
