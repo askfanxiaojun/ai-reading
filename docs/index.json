@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-21T07:30:00+08:00",
+  "updatedAt": "2026-11-22T07:15:00+08:00",
   "days": [
+    {
+      "date": "2026-11-22",
+      "intro": "本期从 Agent 的程序性记忆、浏览器 Agent 的高保真安全沙箱和编码 Agent 的领域 Eval 三个层面，讨论如何把真实经验转成受控改进，并在不伤害真实世界的环境中验证，最终用业务硬门槛决定是否交付。",
+      "path": "archive/2026/11/2026-11-22.json",
+      "revision": "2026-11-22T07:15:00+08:00",
+      "articles": [
+        {
+          "id": "https://www.perplexity.ai/hub/blog/self-improving-skills",
+          "title": "从使用轨迹中学习：Perplexity 如何让 Skill 自我改进",
+          "originalTitle": "Self-improving skills",
+          "url": "https://www.perplexity.ai/hub/blog/self-improving-skills",
+          "topic": "程序性记忆、持续学习与 Skill 治理",
+          "source": "Perplexity",
+          "author": "Perplexity、Nicholas Bien、Se Won Jang、Kate Jung、Nikila Venkat、Jarrod Bryan、Claire Beamer、Jeremy Yang",
+          "publishedAt": "2026-11-18",
+          "readingMinutes": null,
+          "summary": "Perplexity 把 Agent 记忆从保存事实和对话扩展到程序性记忆：后台改进 Agent 定期从成功、失败与用户纠正中提炼可复用做事方法，提出新建、更新、保留或淘汰 Skill 的候选，而不是直接改模型权重或在线重写正式 Skill。个人 Skill 要经过证据、确定性校验与激活；共享 Skill 则需清除秘密数据、生成独立失败场景、成对回放旧版与新版、验证控制场景并由工程师审批 PR。系统限制每个用户最多拥有 10 个自动生成 Skill，迫使新能力与旧能力竞争上下文预算。八周生产随机实验中，开启自动改进的用户工具调用失败率下降 11%，排除后台任务后仍下降约 7%，中高程度不满意会话下降 7.6%，未观察到可测的成本或延迟变化；离线 16 组配对实例成功率从 43.8% 提升至 62.5%。文章由厂商发布，未披露生产实验样本量、绝对失败率与置信区间。",
+          "keyPoints": [
+            "程序性记忆保存的是某类任务以后应怎样执行，而不是只保存用户事实或历史事件。",
+            "执行 Agent 与后台改进 Agent 分离，候选修改需要证据、版本、确定性检查、回放和审批。",
+            "共享 Skill 的失败场景不直接展示给改进 Agent，旧版与新版在失败及控制场景上成对重跑，减少针对测试背答案和能力回归。",
+            "个人自动生成 Skill 上限为 10 个，新增时必须淘汰较低价值 Skill，把上下文容量和遗忘纳入记忆治理。",
+            "生产随机实验显示工具失败与用户不满下降，但厂商未公开样本量、绝对值和统计区间，外部复现仍不足。"
+          ],
+          "whyRead": "它把长期 Agent 的记忆问题推进到能力积累：如何从使用轨迹提炼程序、怎样避免一次偶然纠正固化成长期规则、如何版本化、回放、审批和淘汰。对跨端记忆、Personal Agent 和 Skill 平台，可直接转化为程序性记忆模块及评测清单。"
+        },
+        {
+          "id": "https://blog.google/security/mirror-dimension-for-agents",
+          "title": "不给真实互联网，也能测试浏览器 Agent：Google 的“镜像世界”",
+          "originalTitle": "Mirror Dimension for Agents: Evaluating Browser-Use Agents Without the Web",
+          "url": "https://blog.google/security/mirror-dimension-for-agents/",
+          "topic": "浏览器 Agent、安全沙箱与对抗 Eval",
+          "source": "Google Chrome Security",
+          "author": "Aaron Selya、Charles Qian",
+          "publishedAt": "2026-11-19",
+          "readingMinutes": null,
+          "summary": "Google Chrome 团队为浏览器 Agent 构建封闭的“镜像世界”：Agent 仍访问正常域名并使用真实 Chrome 行为，但 gVisor 沙箱阻断公网，interception proxy 将请求定向到本地、可复位的合成网站；自定义根证书和动态叶证书让 HTTPS 在受控环境中正常工作。团队又使用 Research、Builder 和 Critic Agent 批量生成具有购物、社交、服务和多步表单状态的网站，并通过 Chrome DevTools MCP 实际点击、输入和检查界面。完整控制服务端后，红队系统可在文字、图片、DOM、ARIA 和 WebMCP 响应中动态植入间接提示注入，同时用 HTTP Header 隐藏攻击选择标记，减少模型的评测意识。Google 称每位安全工程师每天可持续生成与改进 1,000 多个候选测试，约为人工能力的 30 倍。文章未公开 Auto Browse 的实际通过率、攻击成功率或合成环境与真实网页的差距。",
+          "keyPoints": [
+            "真实互联网难以复现且可能产生副作用，静态假网页又缺少复杂度并容易让模型产生评测意识。",
+            "gVisor 沙箱、网络代理、受控证书和合成站点共同实现看似真实、实际隔离且每次可复位的评测世界。",
+            "多 Agent harness 生成并检查高保真交互站点，Critic 不只看源码，还实际操作页面并验证修复是否引入回归。",
+            "提示注入可动态进入文字、图片、DOM、ARIA 和 WebMCP 响应，评测必须覆盖完整多步轨迹和多模态攻击面。",
+            "测试候选数量不等于安全质量；Google 未公开 Agent 的安全结果、误报漏报或真实世界泛化数据。"
+          ],
+          "whyRead": "它把 Computer Use 安全从提示词与确认弹窗提升到环境工程：隔离网络、模拟状态、动态攻击、重置副作用并检查完整轨迹。对浏览器 Agent、远程车控、交易和智能硬件 Eval，这是一套可迁移的高风险测试架构。"
+        },
+        {
+          "id": "https://stripe.dev/blog/stripe-integration-evals-methodology",
+          "title": "Stripe 如何评估编码 Agent：平均 78.1 分，为何严格通过率只有 29.4%",
+          "originalTitle": "Stripe evals: Measuring real-world coding agent performance",
+          "url": "https://stripe.dev/blog/stripe-integration-evals-methodology",
+          "topic": "领域 Eval、Agent Plugin 与生产验收",
+          "source": "Stripe",
+          "author": "Kiran Prasad、Yiing Chau Mak、Manish Kurse",
+          "publishedAt": "2026-11-19",
+          "readingMinutes": 13,
+          "summary": "Stripe 设计 69 个支付、订阅和 Connect 场景，测试 14 种模型与 harness 组合在启用或不启用 Stripe Agent Plugin 时能否构建高质量集成。每个场景拆为 MUST 与 SHOULD 条件，既报告逐项平均得分，也报告所有 MUST 必须同时通过的严格通过率：相同结果的平均条件得分为 78.1%，严格通过率仅 29.4%，揭示大量实现只是“几乎正确”。Plugin 为全部 14 个组合带来约 3–8 个百分点提升，过时参数引用从 7% 降到 1.3%，Web 搜索下降 96%，但不同模型的工具调用、成本与时延变化差异很大。评测用 Roleplayer Agent 持有冻结的隐性需求，只依据可观察对话轨迹和工作区文件逐条判定，不读取私有思维链。当前 Benchmark 不做运行时验证，也不评估产品选择和长期维护；案例、Plugin 与评分规则都由 Stripe 提供。",
+          "keyPoints": [
+            "通用代码测试无法判断支付集成是否选对产品、使用当前 API 并覆盖退款、订阅变化与 Webhook 等业务约束。",
+            "平均 78.1% 的条件得分对应只有 29.4% 的严格通过率，说明一个关键 MUST 失败就可能让整个业务结果不可用。",
+            "第一方 Skill 与 MCP 工具降低开放 Web 搜索和过时参数引用，但增益、工具调用、成本与时延高度依赖模型和 harness。",
+            "Roleplayer 在对话前冻结隐性需求，Judge 只看对话和工作区的可观察证据，并逐条判断标准。",
+            "Benchmark 尚未验证代码能否真实运行、产品推荐是否正确或代码能否长期维护，且存在厂商自测自家 Plugin 的覆盖偏差。"
+          ],
+          "whyRead": "它提供了可直接迁移到 MaaS、车控、客服与企业 Agent 的 Eval 方法：真实业务场景、冻结隐性需求、MUST/SHOULD、严格通过率、逐项证据和成本时延联合评估。它尤其能避免用平均分掩盖高风险门槛失败。"
+        }
+      ]
+    },
     {
       "date": "2026-11-21",
       "intro": "本期从企业个人 Agent 的身份与生命周期、AI 原型进入生产代码后的设计—工程边界、以及原始用户数据与综合研究结论对 AI 生成设计质量的影响三个方向，讨论模型能力落地所需的责任、上下文与验收系统。",
