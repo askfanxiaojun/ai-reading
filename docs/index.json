@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-22T07:15:00+08:00",
+  "updatedAt": "2026-11-22T07:25:00+08:00",
   "days": [
     {
       "date": "2026-11-22",
       "intro": "本期从 Agent 的程序性记忆、浏览器 Agent 的高保真安全沙箱和编码 Agent 的领域 Eval 三个层面，讨论如何把真实经验转成受控改进，并在不伤害真实世界的环境中验证，最终用业务硬门槛决定是否交付。",
       "path": "archive/2026/11/2026-11-22.json",
-      "revision": "2026-11-22T07:15:00+08:00",
+      "revision": "2026-11-22T07:25:00+08:00",
       "articles": [
         {
           "id": "https://www.perplexity.ai/hub/blog/self-improving-skills",
