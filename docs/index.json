@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-22T07:25:00+08:00",
+  "updatedAt": "2026-11-23T07:10:00+08:00",
   "days": [
+    {
+      "date": "2026-11-23",
+      "intro": "本期从真实世界语音行动、生成式 UI 的控制边界和 AI 原生研发的组织瓶颈三个层面，讨论 Agent 如何在结构化数字接口之外行动、用受约束界面承载结果，并让生成的变更真正通过验证进入生产。",
+      "path": "archive/2026/11/2026-11-23.json",
+      "revision": "2026-11-23T07:10:00+08:00",
+      "articles": [
+        {
+          "id": "https://research.google/blog/how-google-duplex-evolved-to-also-call-businesses-for-you-in-gemini",
+          "title": "Google Duplex 如何演进为 Gemini 的真实世界电话 Agent",
+          "originalTitle": "How Google Duplex evolved to also call businesses for you in Gemini",
+          "url": "https://research.google/blog/how-google-duplex-evolved-to-also-call-businesses-for-you-in-gemini/",
+          "topic": "语音 Agent、真实世界行动与双边体验",
+          "source": "Google Research",
+          "author": "Yossi Matias、Yaniv Leviathan、Janet Zhou",
+          "publishedAt": "2026-11-20",
+          "readingMinutes": null,
+          "summary": "Google 回顾 Duplex 从封闭领域 RNN、生成模型与确定性状态机混合，演进到以 Gemini 接受自由文本任务并统一理解、规划和对话生成的近十年路径。电话是结构化数字渠道缺失时的现实世界工具，却要求系统在压缩音频、背景噪声、插话和委婉拒绝中维持亚秒级轮次，并把历史通话转成任务可行性与下一步行动的先验。产品同时服务委托者与接电话的商家，因此保留 AI 身份披露、商家关闭或口头拒绝、无需安装新软件以及信息复用来减少重复打扰。文章披露商家信息展示超过一万亿次和五代 Pixel 产品积累，但未公开当前开放任务电话 Agent 的成功率、接管率、延迟或投诉等效果数据。",
+          "keyPoints": [
+            "Duplex 的三代架构从每个窄域独立建模，经过生成模型与确定性护栏混合，走向 Gemini 驱动的自由文本开放任务。",
+            "实时电话要求专门处理噪声、压缩音频、亚秒级延迟、轮次节奏、委婉拒绝和约束协商，通用网页预训练并不足够。",
+            "真实世界 Agent 必须同时设计委托者与行动接收方的体验，包括身份披露、拒绝权、停止机制和避免重复打扰。",
+            "历史交互应转化为任务可行性先验和程序性知识，但每次执行仍要保留目标、约束、协商空间、证据与升级条件。",
+            "文章主要提供架构演进和规模线索，没有公开开放任务 Agent 的关键质量与安全指标。"
+          ],
+          "whyRead": "它展示了语音 Agent 如何跨越窄域状态机与开放式模型，同时不放弃专用低延迟能力、披露与拒绝权。对车载 EVA、手机 Personal Agent 和 AI 眼镜，文章可直接转化为电话工具的任务契约、双边体验和路径级 Eval 清单。"
+        },
+        {
+          "id": "https://www.bighuman.com/blog/generative-ui",
+          "title": "生成式 UI 不是“让模型随便画界面”",
+          "originalTitle": "Designing AI-Native Interfaces: Generative UI & Conversational UX",
+          "url": "https://www.bighuman.com/blog/generative-ui",
+          "topic": "Generative UI、对话体验与设计系统",
+          "source": "Big Human",
+          "author": "作者未确认",
+          "publishedAt": "2026-11-21",
+          "readingMinutes": null,
+          "summary": "Big Human 把生成式 UI 按模型自由度分成静态受控、声明式和开放式三种：前者只选择预制组件，声明式方案让模型输出结构化描述并由客户端组件渲染，开放式方案允许工具在沙箱中返回完整交互表面。文章强调自然语言适合表达目标，却不适合承载比较、编辑和确认的全部操作；生成结果应能直接编辑，并有清楚的流式中间态与一键恢复。设计系统因而成为模型的界面语言，需要同时提供组件用途、Schema、组合规则、状态、风险和多端降级。文章来自设计开发服务商，没有对照研究、质量数据或完整安全方法，适合作为决策框架而非效果证明。",
+          "keyPoints": [
+            "静态、声明式和开放式 Generative UI 是控制与灵活性的风险选择，不是简单的技术先进程度排序。",
+            "Chat 擅长收集模糊意图，比较、筛选、编辑和确认更适合结构化且可直接操作的界面。",
+            "设计系统需要面向模型补充语义用途、输入 Schema、允许组合、异常状态、风险和多端规则。",
+            "金融、医疗和车控等高风险场景倾向受控模式，数据探索适合声明式，第三方工具表面才可能需要开放式沙箱。",
+            "文章属于服务商经验总结，缺少任务成功率、无障碍、安全事件、维护成本和用户研究数据。"
+          ],
+          "whyRead": "它把生成式 UI 从视觉新奇感推进到产品边界：模型能决定什么、组件如何约束、用户怎样编辑和恢复、不同终端允许多大自由。对车、手机、眼镜三端以及 Agent 工具 UI，这是一张实用的架构与体验选择地图。"
+        },
+        {
+          "id": "https://autonomyai.io/blog/the-bottleneck-moved",
+          "title": "代码变便宜以后，真正的瓶颈移到了哪里",
+          "originalTitle": "The bottleneck moved: what 131 product and engineering teams told us",
+          "url": "https://autonomyai.io/blog/the-bottleneck-moved/",
+          "topic": "AI 原生研发、组织流程与可信交付",
+          "source": "AutonomyAI",
+          "author": "Guy Leshno",
+          "publishedAt": "2026-11-17",
+          "readingMinutes": null,
+          "summary": "AutonomyAI 回看 326 次外部通话，其中 237 次来自 131 家 B2B 软件公司买方，记录 1,103 条工作方式抱怨，并按公司而非通话次数计数。四分之五公司同时提出至少三类问题；70 家谈到信任，其中 30 家将其视为急迫问题。文章认为 AI 让代码供给增加，却没有消除 PRD、Figma、工单和真实代码库之间的翻译损耗，工程审查与可信合并因此成为新瓶颈。更合理的进度单位不是代码行、原型或打开的 PR，而是无需重写、经过验证并合并上线的变更。材料来自厂商销售通话，存在样本选择、商业立场和编码方法不透明等限制，不能证明普遍因果。",
+          "keyPoints": [
+            "产品抱怨交接与无法修改真实产品，工程抱怨审查与信任，二者是同一价值流上下游的问题。",
+            "四分之五的 131 家公司同时提出至少三类问题；提到信任的 70 家中有 30 家称其急迫。",
+            "旁路原型若不使用真实代码库、组件和约束，最终仍会产生重建；无护栏的真实代码生成则会放大审查队列。",
+            "AI 原生研发的核心指标应转向合并上线、等待、返工、缺陷和每个合格变更的总成本。",
+            "数据来自销售流程且由售卖相关工具的厂商分析，适合作为待验证假设，不宜当作独立行业调查。"
+          ],
+          "whyRead": "它为高级产品经理提供了比“开发提效”更完整的度量：从意图、真实代码库、自动护栏和人工判断一路追踪到合并与线上结果。对推动 PM 原型、AI 编码和 Agent Skill 迭代的团队，它能帮助识别局部加速是否只是把负担转移给审查与返工。"
+        }
+      ]
+    },
     {
       "date": "2026-11-22",
       "intro": "本期从 Agent 的程序性记忆、浏览器 Agent 的高保真安全沙箱和编码 Agent 的领域 Eval 三个层面，讨论如何把真实经验转成受控改进，并在不伤害真实世界的环境中验证，最终用业务硬门槛决定是否交付。",
