@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-23T07:10:00+08:00",
+  "updatedAt": "2026-11-23T07:20:00+08:00",
   "days": [
     {
       "date": "2026-11-23",
       "intro": "本期从真实世界语音行动、生成式 UI 的控制边界和 AI 原生研发的组织瓶颈三个层面，讨论 Agent 如何在结构化数字接口之外行动、用受约束界面承载结果，并让生成的变更真正通过验证进入生产。",
       "path": "archive/2026/11/2026-11-23.json",
-      "revision": "2026-11-23T07:10:00+08:00",
+      "revision": "2026-11-23T07:20:00+08:00",
       "articles": [
         {
           "id": "https://research.google/blog/how-google-duplex-evolved-to-also-call-businesses-for-you-in-gemini",
