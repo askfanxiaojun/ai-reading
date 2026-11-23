@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-23T07:20:00+08:00",
+  "updatedAt": "2026-11-24T07:00:00+08:00",
   "days": [
+    {
+      "date": "2026-11-24",
+      "intro": "本期从 Personal Agent 的外部授权协议、AI 原生研发的移动瓶颈和原型先行的产品发现流程三个层面，讨论 Agent 如何被外部服务信任、如何让生成的变更携带验证证据，以及如何把低成本原型转化为可追溯的产品决策。",
+      "path": "archive/2026/11/2026-11-24.json",
+      "revision": "2026-11-24T07:00:00+08:00",
+      "articles": [
+        {
+          "id": "https://sierra.ai/blog/releasing-poppy",
+          "title": "Poppy 1.0：Personal Agent 与企业交互，需要一份“代理关系协议”",
+          "originalTitle": "Releasing Personal Agent Protocol 1.0",
+          "url": "https://sierra.ai/blog/releasing-poppy",
+          "topic": "Personal Agent、授权协议与 Agent Commerce",
+          "source": "Sierra",
+          "author": "Bret Taylor、Clay Bavor",
+          "publishedAt": "2026-11-13",
+          "readingMinutes": null,
+          "summary": "Poppy 1.0 把 Personal Agent 与企业服务之间长期缺失的关系层单独标准化：Agent 先发现企业支持的网站、API或企业 Agent，表明自己受谁委托，再通过 OAuth 等机制取得范围受限且可撤销的权限。协议不替代 MCP、OpenAPI 或 UCP，而是补足 Agent 身份、用户授权、跨渠道会话和高风险动作确认。Sierra称该版本经过一百多家设计伙伴约五周的真实系统测试，并展示了 Mercury、Turkish Airlines 与 Shopify 的分级授权案例。对手机 EVA 等跨端 Agent，文章启发在于先建立 Principal、Purpose、Scope、Duration、Approval、Evidence 与 Revocation 组成的委托任务契约。",
+          "keyPoints": [
+            "Personal Agent 需要的不只是工具接口，还需要企业可识别的委托身份、权限范围和持续会话。",
+            "Poppy 位于任务规划与具体执行之间，补足 OAuth 授权、Agent 发现、跨渠道连续性和企业约束。",
+            "查询、建议、发起交易与最终付款应分级授权，把确认放在改变资金、权利或承诺的节点。",
+            "跨手机、车机和眼镜执行时，账号一致不等于交互端等价，确认界面必须明确展示代理者、目的、数据与可撤销性。",
+            "合作伙伴数量只能证明推动力度，真实采用还需看互操作、授权成功、越权和任务完成等指标。"
+          ],
+          "whyRead": "它把 Personal Agent 从聊天体验和工具连接推进到真正进入外部服务时的身份、授权与责任问题。对规划手机 EVA、人车家跨端 Agent、交易或账户类能力的产品经理，最值得迁移的是一套委托任务契约：谁委托、为什么、能做什么、持续多久、何时确认、留下什么证据以及如何撤回。"
+        },
+        {
+          "id": "https://lethain.com/passing-100-prs-in-a-week",
+          "title": "一周合并 100+ 个 PR 之后：AI 研发的瓶颈如何连续迁移",
+          "originalTitle": "Shipping 100+ PRs to production in a week",
+          "url": "https://lethain.com/passing-100-prs-in-a-week/",
+          "topic": "AI 原生研发、验证与 Agent 编排",
+          "source": "Irrational Exuberance",
+          "author": "Will Larson",
+          "publishedAt": "2026-11-22",
+          "readingMinutes": null,
+          "summary": "Will Larson 复盘 Imprint 在最高七天窗口合并 170 个 PR 的过程，其中 153 个来自内部云端 Agent Harness。文章价值不在 PR 数量，而在展示瓶颈如何从 CI/CD、错误上下文、非结构化任务、本地并发、权限与工具，连续迁移到审批和验证。团队最终发现审批慢只是表象，真正缺少的是可审批的 PR：每次变更必须附带结构化验证文件，说明检查了什么、如何检查，再由审查者决定是否深入读代码。简单任务被规模化后，稀缺资源转向复杂问题定义、行业判断和验证证据。",
+          "keyPoints": [
+            "提高生成吞吐量会依次暴露交付链条的下一个瓶颈，AI 不会自动消灭软件工程流程。",
+            "过期 RFC、PRD 和知识库会污染 Agent 上下文，需要让代码变化反向维护文档。",
+            "云端 Harness 的关键价值是并发、事件触发、默认工具、失败恢复与人类问题升级，而不只是远程跑模型。",
+            "审批变快不能解决不可审查的产物，交付单位应升级为变更、验证声明与证据。",
+            "每周 PR 数不是生产力结论，仍需结合线上缺陷、用户价值、人工成本和复杂度。"
+          ],
+          "whyRead": "它提供了少见的端到端真实案例，说明 AI 编码工具进入成熟组织后，问题会从写代码转向上下文治理、结构化任务、验证和编排。对 AI 产品负责人和研发管理者，可直接迁移的是移动瓶颈看板以及“每个变更必须携带证据”的交付方式，而不是追逐 PR 数量。"
+        },
+        {
+          "id": "https://uxdesign.cc/prototypes-have-always-been-the-most-effective-specification-10162107b2ee",
+          "title": "当原型一天就能做完，规格文档应该写在什么时候？",
+          "originalTitle": "Prototypes have always been the most effective specification—especially with AI",
+          "url": "https://uxdesign.cc/prototypes-have-always-been-the-most-effective-specification-10162107b2ee",
+          "topic": "产品发现、AI 原型与规格重构",
+          "source": "UX Collective",
+          "author": "Patrick Neeman",
+          "publishedAt": "2026-11-22",
+          "readingMinutes": 10,
+          "summary": "Patrick Neeman 认为规格文档过去写在开发之前，是因为写作比构建便宜；当 AI 让产品经理、设计师或工程师一天内做出可运行原型后，成本关系已经改变。更合适的顺序是先用原型把抽象争论转为可观察行为，通过持续用户研究和 RITE 式快速迭代修正，再让 PRD 记录试过什么、哪里失败、为什么选择当前方案以及进入生产还缺哪些证据。原型不是答案，它也会偷偷决定错误文案、空状态、权限和组件，因此进入生产前必须进行默认值审计。",
+          "keyPoints": [
+            "PRD 不必消失，但可以从开发前预测转成测试后的决策与证据记录。",
+            "低成本原型使用户研究从项目阶段变成围绕每次构建的持续循环。",
+            "对模型功能，代表性 Eval 样例、禁止行为、评分规则和上线阈值可以直接构成规格。",
+            "任何角色都能生成原型后，团队更需要明确质量标准、研究方法和生产门槛。",
+            "第一个原型应可丢弃，并在进入生产前审计错误状态、假数据、组件来源和过度权限。"
+          ],
+          "whyRead": "它不是简单鼓励 PM 写代码，而是重新定义原型、用户研究和 PRD 的关系。对使用 AI 原型工具规划手机 EVA、眼镜或 Agent 产品的团队，可直接采用“原型提出问题—少量用户持续测试—规格记录决策—Eval 定义门槛”的周循环，既提高速度又避免把漂亮 Demo 当成已验证产品。"
+        }
+      ]
+    },
     {
       "date": "2026-11-23",
       "intro": "本期从真实世界语音行动、生成式 UI 的控制边界和 AI 原生研发的组织瓶颈三个层面，讨论 Agent 如何在结构化数字接口之外行动、用受约束界面承载结果，并让生成的变更真正通过验证进入生产。",
