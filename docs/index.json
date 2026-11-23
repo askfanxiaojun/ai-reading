@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-24T07:00:00+08:00",
+  "updatedAt": "2026-11-24T07:10:00+08:00",
   "days": [
     {
       "date": "2026-11-24",
       "intro": "本期从 Personal Agent 的外部授权协议、AI 原生研发的移动瓶颈和原型先行的产品发现流程三个层面，讨论 Agent 如何被外部服务信任、如何让生成的变更携带验证证据，以及如何把低成本原型转化为可追溯的产品决策。",
       "path": "archive/2026/11/2026-11-24.json",
-      "revision": "2026-11-24T07:00:00+08:00",
+      "revision": "2026-11-24T07:10:00+08:00",
       "articles": [
         {
           "id": "https://sierra.ai/blog/releasing-poppy",
