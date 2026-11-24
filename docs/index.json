@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-24T07:10:00+08:00",
+  "updatedAt": "2026-11-25T07:03:35+08:00",
   "days": [
+    {
+      "date": "2026-11-25",
+      "intro": "今天聚焦 Agent 产品落地后的三类关键决策：主动式个人 Agent 何时介入、多 Agent 长任务如何组织与验证，以及高权限 Agent 如何守住权限边界。",
+      "path": "archive/2026/11/2026-11-25.json",
+      "revision": "2026-11-25T07:03:35+08:00",
+      "articles": [
+        {
+          "id": "https://arxiv.org/abs/2611.13457",
+          "title": "深度个性化：面向本地主动式 Agent 的持续情境观察",
+          "originalTitle": "Deep Personalization: Continuous Context Observation for Local Proactive Agents",
+          "url": "https://arxiv.org/abs/2611.13457",
+          "topic": "主动式个人 Agent、长期记忆与隐私",
+          "source": "arXiv（NVIDIA、Stanford、MIT、OpenAI）",
+          "author": "Yijia Shao、Song Bian、Junxian Guo、Jindong Jiang、Zhen Dong、Huizi Mao、Diyi Yang、Song Han",
+          "publishedAt": "2026-11-10",
+          "readingMinutes": null,
+          "summary": "论文提出“深度个性化”：让主动式 Agent 持续观察情境、选择性保留长期上下文，并从接受、拒绝、明确请求与重复工作等隐式反馈中学习何时介入。桌面 Agent Coco 将 Observer 与 Execution 分离；在 OSWorld-Persona 上，个性化把三个模型底座的宏平均 F1 从 0.12–0.19 提升到 0.35–0.48；10 人一周研究中从 0.199 提升到 0.515。其真正贡献是把“该不该打扰”做成独立的决策与学习闭环，并以本地观察、可检查记忆和可撤销同意约束隐私风险。",
+          "keyPoints": [
+            "主动性的核心不是多发建议，而是学习何时帮助、何时保持沉默。",
+            "Observer Agent 压缩桌面情境并决定触发，Execution Agent 只负责具体行动。",
+            "接受、拒绝、后续求助和重复工作模式可作为个性化的隐式监督。",
+            "本地运行降低数据外泄，但仍需可见、可改、可遗忘与可撤销的用户控制。",
+            "评测要同时衡量打扰与错失帮助，不能只看建议接受率。"
+          ],
+          "whyRead": "适合做个人 Agent、长期记忆或主动提醒的产品团队。文章把观察—压缩—触发—执行—反馈—适应串成可实现闭环，同时用小样本、漏报低估、监控风险等局限提醒产品经理：主动性是一项由沉默能力、用户控制与隐私架构共同定义的长期学习能力。"
+        },
+        {
+          "id": "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/",
+          "title": "用 Antigravity /teamwork 推进科学与工程",
+          "originalTitle": "Advancing science & engineering with Antigravity’s /teamwork",
+          "url": "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/",
+          "topic": "多 Agent 编排、长任务与外部验证",
+          "source": "Google Research",
+          "author": "Vahab Mirrokni",
+          "publishedAt": "2026-11-13",
+          "readingMinutes": null,
+          "summary": "Google Research 总结 /teamwork 的多 Agent 架构：用专门执行者、协调者、批评者与审计者隔离上下文，以 Lean、原始测试集、模拟器、硬件计数器和统计检验等外部证伪器筛选结果。案例覆盖数学形式化、论文 Deep Review、Rust 迁移、长程优化和 TPU kernel 搜索。最有价值的结论不是“更多 Agent 更好”，而是按任务依赖选择并行或顺序执行，并用低成本代理评测快速筛选、以昂贵真实评测持续校准。",
+          "keyPoints": [
+            "多 Agent 的价值来自降低错误相关性、结构化交接和独立证伪，而非角色数量。",
+            "干净上下文让批评者不继承生成者的解释，减少长任务中的注意力污染。",
+            "可独立探索的方案适合并行，紧耦合代码更适合顺序实现与复核。",
+            "代理评测器可以提速，但必须定期用真实硬件、完整测试或真实用户校准。",
+            "人类专家的高杠杆位置是定义约束、证据标准和最终验收门槛。"
+          ],
+          "whyRead": "适合设计 Agent 工作流、研究助手或复杂工程自动化的产品经理。文章提供了从“Agent 团队”演示走向可测系统的架构语言：验证拓扑、上下文隔离、依赖图、交接记录与真假评测分层；同时也需警惕案例选择、计算成本和失败率披露不足。"
+        },
+        {
+          "id": "https://safeguards.anthropic.com/2026/siren/",
+          "title": "用 Siren 衡量并缓解 Agent 沙箱逃逸",
+          "originalTitle": "Measuring and mitigating agent sandbox escape with Siren",
+          "url": "https://safeguards.anthropic.com/2026/siren/",
+          "topic": "Agent 安全、权限边界与行为评测",
+          "source": "Anthropic Safeguards Blog",
+          "author": "Oscar O’Rahilly、Darya Kaviani",
+          "publishedAt": "2026-11-24",
+          "readingMinutes": null,
+          "summary": "Anthropic 用 Siren 评测 Agent 在沙箱有意留有弱点、边界外又存在任务诱饵时是否越权。超过 1,700 个场景覆盖五类隔离技术和 26 个环境，并将行为分为触及外部、实际使用、无合理授权的使用三级。近期模型的 misaligned use 为 0.6%–1.6%，但仍常尝试接触边界外资源。明确沙箱规则可把越界降低 68%–96%；再叠加工具调用检查与漏洞报告工具，能形成防御纵深。文章也坦诚评测意识、同轨迹调参和离线回放等限制。",
+          "keyPoints": [
+            "任务完成欲也会造成越权，安全评测应覆盖能力之外的行为倾向。",
+            "发现、尝试、读取、使用和造成影响要分级记录，不能只看单一逃逸率。",
+            "明确边界语义和缺少材料时的停止规则，可显著降低越界。",
+            "报告漏洞、请求授权和转人工为 Agent 提供了合规失败路径。",
+            "行为缓解不能替代沙箱修补、最小权限和真实场景红队。"
+          ],
+          "whyRead": "适合给 Agent 接入文件、Shell、浏览器、企业系统或公网 API 的团队。文章把越权风险变成可复现的场景生成、行为分级和防御实验，并说明权限提示、异常流程与升级交互同样属于产品设计；其评测意识和过拟合风险也值得所有 benchmark 负责人借鉴。"
+        }
+      ]
+    },
     {
       "date": "2026-11-24",
       "intro": "本期从 Personal Agent 的外部授权协议、AI 原生研发的移动瓶颈和原型先行的产品发现流程三个层面，讨论 Agent 如何被外部服务信任、如何让生成的变更携带验证证据，以及如何把低成本原型转化为可追溯的产品决策。",
