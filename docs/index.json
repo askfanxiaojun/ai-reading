@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-25T07:03:35+08:00",
+  "updatedAt": "2026-11-25T07:06:00+08:00",
   "days": [
     {
       "date": "2026-11-25",
       "intro": "今天聚焦 Agent 产品落地后的三类关键决策：主动式个人 Agent 何时介入、多 Agent 长任务如何组织与验证，以及高权限 Agent 如何守住权限边界。",
       "path": "archive/2026/11/2026-11-25.json",
-      "revision": "2026-11-25T07:03:35+08:00",
+      "revision": "2026-11-25T07:06:00+08:00",
       "articles": [
         {
           "id": "https://arxiv.org/abs/2611.13457",
