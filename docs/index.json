@@ -1,8 +1,76 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-25T07:06:00+08:00",
+  "updatedAt": "2026-11-26T07:07:55+08:00",
   "days": [
+    {
+      "date": "2026-11-26",
+      "intro": "本期从 Agent 记忆的共同治理、主观叙述下的社交推理，以及自动化后的人工审查三个层面，讨论当 Agent 越来越自主时，怎样让用户持续看见依据、形成判断并局部纠正。",
+      "path": "archive/2026/11/2026-11-26.json",
+      "revision": "2026-11-26T07:07:55+08:00",
+      "articles": [
+        {
+          "id": "https://arxiv.org/abs/2611.24165",
+          "title": "MemoSync：让开发者与 Agent 共同管理“记忆的记忆”",
+          "originalTitle": "MemoSync: Co-Managing Developer-Agent Metamemory Across Contexts",
+          "url": "https://arxiv.org/abs/2611.24165",
+          "topic": "Agent 记忆、跨端同步与用户控制",
+          "source": "arXiv（HCI / Software Engineering）",
+          "author": "Baiqiao Zhang、Junze Li、Chunyang Luo、Yuying Tang、Wenshuo Zhang、Shiyuan Piao、Dingdong Liu、Shuai Ma、Xiaojuan Ma",
+          "publishedAt": "2026-11-18",
+          "readingMinutes": null,
+          "summary": "论文把 Agent 记忆的核心问题定义为 metamemory gap：用户无法判断系统存了什么、本轮取了什么、执行时是否遵守，以及结果受到哪些记忆影响。MemoSync 将记忆设计成共享、可操作的中间表示，覆盖候选审核、个人/项目/会话作用域、跨项目抽象迁移、冲突修复、本轮工作记忆预览、执行引用、实时打断与事后审计。132 人对照实验中，MemoSync 的任务得分为 59.8%，高于自动记忆的 47.7% 与静态 MEMORY.md 的 51.1%；记忆内容对齐度为 88.0%，感知—实际使用差距也降至 0.19。参与者进行了远多于基线的监控与控制动作，但没有检测到任务时间、主观负担或可用性的显著恶化。局限在于任务域较窄、多个设计因素未拆分、一周部署仅 9 人，尚不能证明长期和团队级治理的效果。",
+          "keyPoints": [
+            "记忆控制应覆盖演化、选择、执行和影响，而不只是一个开关或删除列表。",
+            "长期记忆库与每轮工作记忆应分层，高风险行动前允许检查和纠正。",
+            "跨项目或跨设备迁移需要保留来源，并在新情境中重新确认作用域。",
+            "执行中的行内引用和事后审计让用户能判断记忆是否真的影响了结果。",
+            "嵌入决策时刻的控制点可以增加监督密度，而不必显著增加感知负担。"
+          ],
+          "whyRead": "这篇把记忆问题从 RAG、向量库和摘要策略推进到可操作的产品治理。对统一记忆、Personal Agent、手机与车端协同尤其有启发：它给出了“长期库—本轮工作记忆—执行引用—结果审计—历史记录”的完整分层，并用实验说明透明度与介入点不仅影响信任，也可能直接改善任务质量。"
+        },
+        {
+          "id": "https://research.google/blog/verifiable-social-reasoning-for-llm-assistants/",
+          "title": "可验证的 AI 助手社交推理",
+          "originalTitle": "Verifiable Social Reasoning for LLM Assistants",
+          "url": "https://research.google/blog/verifiable-social-reasoning-for-llm-assistants/",
+          "topic": "对话 Eval、情感陪伴与主观偏差",
+          "source": "Google Research",
+          "author": "Zorik Gekhman、Amir Taubenfeld、Avigail Grinstein-Dabush、Ariel Goldstein、Lior Nezry、Romina Stella、Itay Laish、Marian Croak、Yossi Matias、Amir Feder",
+          "publishedAt": "2026-11-25",
+          "readingMinutes": null,
+          "summary": "Google Research 研究 AI 助手面对 user-mediated reality 时的社交推理：助手没有亲历事件，只能接收用户经过选择、遗漏和情绪过滤后的叙述。团队先在多 Agent 模拟中为目标角色设定隐藏动机，再让用户 persona 带着特定认知偏差复盘，最后要求被测助手仅根据这段主观叙述判断动机，因此获得了可验证的真值。框架已生成超过 2 万个样例并评测 12 个模型。结果显示，模型直接观察完整事件时明显更准确；只听用户转述会显著下降，并容易接受用户的怀疑或不安框架。更多细节通常有帮助，但更长对话未必更好，模型可能为维持连贯而强化早期锚定。局限包括社会动机并不总有单一真值、模拟角色受生成模型影响、裁判模型也有偏差，且正文未披露全部绝对分数。",
+          "keyPoints": [
+            "社交助手必须区分外部事实、用户观察、用户解释和系统推断。",
+            "共情不应等于确认未经验证的前提。",
+            "澄清问题要优化信息增益，主动区分竞争假设。",
+            "多轮 Eval 应测新证据出现后的修正能力，而不只是前后一致。",
+            "可控模拟世界能为原本缺少真值的社交推理建立规模化评测。"
+          ],
+          "whyRead": "对情感陪伴、长期记忆和 Personal Agent，这篇揭示了一个比普通幻觉更隐蔽的风险：模型可能把用户的猜测包装成更确定、更有说服力的结论。它同时提供可落地的 Eval 方法——先生成有完整事实的世界，再只给 Agent 局部且带偏差的视角，测量其能否保持认识论距离并利用新证据修正判断。"
+        },
+        {
+          "id": "https://www.agentexperiences.com/blog/when-review-is-the-job",
+          "title": "当审查 AI 的工作本身成为工作",
+          "originalTitle": "When Reviewing the AI's Work Becomes the Job",
+          "url": "https://www.agentexperiences.com/blog/when-review-is-the-job",
+          "topic": "Agent UX、审批与自动化偏见",
+          "source": "Agent Experiences",
+          "author": "Alan Weibel",
+          "publishedAt": "2026-11-25",
+          "readingMinutes": 7,
+          "summary": "文章讨论 Agent 大量完成代码、文档或业务操作后，人的角色如何从执行者转为审核者。经典自动化悖论指出，系统长期正确会降低人的警觉，而长期不亲手执行又会削弱接管技能；因此，一个“批准全部”按钮并不等于有效监督。作者结合 Bainbridge 的自动化研究、METR 对 16 名开发者和 246 个真实任务的实验、DORA 的吞吐与不稳定性信号，以及 Anthropic、Google 的 AI 代码数据，提出六条 Review UX 原则：展示变化而非聊天记录、把证据放在声明旁、分块验收、突出异常并说明原因、提出需要思考的问题、保留人的执行和接管能力。局限是这些原则尚未经直接随机对照实验，公开代码统计口径不同，也缺少“未认真阅读即批准”的真实发生率。",
+          "keyPoints": [
+            "审查界面应以最终差异、影响范围和证据为中心，而非完整 Agent 轨迹。",
+            "把大任务拆成可读、可局部退回的单元，减少形式化批准。",
+            "异常提示必须解释为什么异常，不能只给一个警告图标。",
+            "高风险确认应提出少量需要判断的具体问题，低风险可逆动作则保留撤销。",
+            "审批质量要用错误批准、局部修改、抽检命中、回滚和接管成功来测量。"
+          ],
+          "whyRead": "这篇最短，但直击 Agent 产品从“生成界面”转向“审查界面”的下一阶段。它提醒产品经理，Human-in-the-loop 不是在关键节点弹窗，而是给用户足够上下文、证据和局部修改能力。六条原则可以直接用于代码、消息、日程、合同、远程车控和任何批量 Agent 行动。"
+        }
+      ]
+    },
     {
       "date": "2026-11-25",
       "intro": "今天聚焦 Agent 产品落地后的三类关键决策：主动式个人 Agent 何时介入、多 Agent 长任务如何组织与验证，以及高权限 Agent 如何守住权限边界。",
