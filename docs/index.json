@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "storageMode": "daily-archive-v1",
-  "updatedAt": "2026-11-26T07:07:55+08:00",
+  "updatedAt": "2026-11-26T07:09:45+08:00",
   "days": [
     {
       "date": "2026-11-26",
       "intro": "本期从 Agent 记忆的共同治理、主观叙述下的社交推理，以及自动化后的人工审查三个层面，讨论当 Agent 越来越自主时，怎样让用户持续看见依据、形成判断并局部纠正。",
       "path": "archive/2026/11/2026-11-26.json",
-      "revision": "2026-11-26T07:07:55+08:00",
+      "revision": "2026-11-26T07:09:45+08:00",
       "articles": [
         {
           "id": "https://arxiv.org/abs/2611.24165",
